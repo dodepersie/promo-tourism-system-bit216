@@ -1,6 +1,4 @@
-<nav
-  class="bg-white fixed w-full z-20 top-0 start-0 border-b border-gray-300"
->
+<nav class="bg-white fixed w-full z-20 top-0 start-0 border-b border-gray-300">
   <div
     class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-3"
   >
@@ -10,22 +8,31 @@
       >
     </a>
     <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-      <a
-        routerLink="/login"
-        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-      >
-        Login
-      </a>
+      <ng-container *ngIf="!isLoggedIn">
+        <a
+          routerLink="/login"
+          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        >
+          Login
+        </a>
+      </ng-container>
+
+      <ng-container *ngIf="isLoggedIn">
+        <button
+          (click)="logout()"
+          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        >
+          Logout
+        </button>
+      </ng-container>
       <button
-        data-collapse-toggle="navbar-sticky"
-        type="button"
         class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-        aria-controls="navbar-sticky"
-        aria-expanded="false"
+        type="button"
+        (click)="toggleOpen()"
+        [ngClass]="{ active: isOpen }"
       >
-        <span class="sr-only">Open main menu</span>
         <svg
-          class="w-5 h-5"
+          class="w-5 h-5 text-gray-800 dark:text-white"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -41,32 +48,104 @@
         </svg>
       </button>
     </div>
+
     <div
       class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
-      id="navbar-sticky"
+      id="navbar"
     >
       <ul
         class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700"
       >
-        <li>
-          <a
-            routerLink="/"
-            routerLinkActive="bg-blue-700 text-white md:text-blue-700 md:dark:text-blue-500"
-            [routerLinkActiveOptions]="{ exact: true }"
-            class="block py-2 pl-3 pr-4 text-gray-900 rounded md:bg-transparent md:p-0"
-            aria-current="page"
-            >Home</a
-          >
-        </li>
-        <li>
-          <a
-            routerLink="/products"
-            routerLinkActive="bg-blue-700 text-white md:text-blue-700 md:dark:text-blue-500"
-            [routerLinkActiveOptions]="{ exact: true }"
-            class="block py-2 pl-3 pr-4 text-gray-900 rounded md:bg-transparent md:p-0"
-            >Products</a
-          >
-        </li>
+        <ng-container>
+          <li>
+            <a
+              routerLink="/"
+              routerLinkActive="bg-blue-700 text-white md:text-blue-700 md:dark:text-blue-500"
+              [routerLinkActiveOptions]="{ exact: true }"
+              class="block py-2 pl-3 pr-4 text-gray-900 rounded md:bg-transparent md:p-0"
+              aria-current="page"
+              >Home</a
+            >
+          </li>
+          <li>
+            <a
+              routerLink="/products"
+              routerLinkActive="bg-blue-700 text-white md:text-blue-700 md:dark:text-blue-500"
+              [routerLinkActiveOptions]="{ exact: true }"
+              class="block py-2 pl-3 pr-4 text-gray-900 rounded md:bg-transparent md:p-0"
+              >Products</a
+            >
+          </li>
+        </ng-container>
+
+        <ng-container *ngIf="isLoggedIn">
+          <li>
+            <div class="border-l border-gray-200 h-6"></div>
+          </li>
+          <li>
+            <a
+              routerLink="/user-dashboard"
+              routerLinkActive="bg-blue-700 text-white md:text-blue-700 md:dark:text-blue-500"
+              [routerLinkActiveOptions]="{ exact: true }"
+              class="block py-2 pl-3 pr-4 text-gray-900 rounded md:bg-transparent md:p-0"
+              aria-current="page"
+              >Dashboard</a
+            >
+          </li>
+          <li>
+            <a
+              routerLink="/user-dashboard/manage"
+              routerLinkActive="bg-blue-700 text-white md:text-blue-700 md:dark:text-blue-500"
+              [routerLinkActiveOptions]="{ exact: true }"
+              class="block py-2 pl-3 pr-4 text-gray-900 rounded md:bg-transparent md:p-0"
+              >Manage</a
+            >
+          </li>
+        </ng-container>
+      </ul>
+    </div>
+  </div>
+
+  <div class="flex flex-col justify-center p-4 pt-0" *ngIf="isOpen">
+    <div class="bg-gray-100 rounded-lg p-4">
+      <ul class="space-y-4">
+        <ng-container>
+          <li>
+            <a
+              routerLink="/"
+              routerLinkActive="font-bold"
+              [routerLinkActiveOptions]="{ exact: true }"
+              >Home</a
+            >
+          </li>
+          <li>
+            <a
+              routerLink="/products"
+              routerLinkActive="font-bold"
+              [routerLinkActiveOptions]="{ exact: true }"
+              >Products</a
+            >
+          </li>
+        </ng-container>
+
+        <ng-container *ngIf="isLoggedIn">
+          <li>
+            <a
+              routerLink="/user-dashboard"
+              routerLinkActive="font-bold"
+              [routerLinkActiveOptions]="{ exact: true }"
+              >Dashboard</a
+            >
+          </li>
+          <li>
+            <a
+              routerLink="/user-dashboard/manage"
+              routerLinkActive="font-bold"
+              [routerLinkActiveOptions]="{ exact: true }"
+              >Manage</a
+            >
+          </li>
+        </ng-container>
       </ul>
     </div>
   </div>

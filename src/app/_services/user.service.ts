@@ -4,39 +4,44 @@ import { Observable, Subject, tap } from 'rxjs';
 import { User } from '../user';
 
 @Injectable({
- providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
- private url = 'http://localhost:8000';
- private users$: Subject<User[]> = new Subject();
+  private url = 'http://localhost:8000/api/users';
+  private users$: Subject<User[]> = new Subject();
 
- constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {}
 
- private refreshUsers() {
-   this.httpClient.get<User[]>(`${this.url}/users`)
-     .subscribe(users => {
-       this.users$.next(users);
-     });
- }
+  private refreshUsers() {
+    this.httpClient.get<User[]>(`${this.url}`).subscribe((users) => {
+      this.users$.next(users);
+    });
+  }
 
- getUsers(): Subject<User[]> {
-   this.refreshUsers();
-   return this.users$;
- }
+  getUsers(): Subject<User[]> {
+    this.refreshUsers();
+    return this.users$;
+  }
 
- getUser(id: string): Observable<User> {
-   return this.httpClient.get<User>(`${this.url}/users/${id}`);
- }
+  getUser(id: string): Observable<User> {
+    return this.httpClient.get<User>(`${this.url}/${id}`);
+  }
 
- createUser(user: User): Observable<string> {
-   return this.httpClient.post(`${this.url}/users`, user, { responseType: 'text' });
- }
+  createUser(user: User): Observable<string> {
+    return this.httpClient.post(`${this.url}`, user, {
+      responseType: 'text',
+    });
+  }
 
- updateUser(id: string, user: User): Observable<string> {
-   return this.httpClient.put(`${this.url}/users/${id}`, user, { responseType: 'text' });
- }
+  updateUser(id: string, user: User): Observable<string> {
+    return this.httpClient.put(`${this.url}/${id}`, user, {
+      responseType: 'text',
+    });
+  }
 
- deleteUser(id: string): Observable<string> {
-   return this.httpClient.delete(`${this.url}/users/${id}`, { responseType: 'text' });
- }
+  deleteUser(id: string): Observable<string> {
+    return this.httpClient.delete(`${this.url}/${id}`, {
+      responseType: 'text',
+    });
+  }
 }

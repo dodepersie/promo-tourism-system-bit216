@@ -3,5 +3,8 @@ export interface User {
   username?: string;
   email?: string;
   password?: string;
-  role?: string;
+  merchantName?: string,
+  phoneNumber?: string,
+  companyDesc?: string,
+  roles?: string;
 }

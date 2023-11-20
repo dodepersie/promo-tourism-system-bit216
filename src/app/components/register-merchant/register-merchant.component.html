@@ -1,1 +1,42 @@
-<p>register-merchant works!</p>
+<app-home>
+  <div class="py-10 p-4">
+    <div
+      class="container mx-auto max-w-lg p-6 bg-white border border-gray-200 rounded-lg shadow space-y-4"
+    >
+      <form id="registerMerchantForm" [formGroup]="registerMerchantForm">
+        <app-register-merchant-stepper [linearModeSelected]="false" #appStepper>
+          <cdk-step
+            label="Enter Information"
+            formGroupName="merchantData"
+            [stepControl]="registerMerchantForm.get('merchantData')!"
+          >
+            <app-register-merchant-form
+              (formSubmitted)="addMerchant($event)"
+              [registerMerchantForm]="registerMerchantForm"
+            >
+            </app-register-merchant-form>
+          </cdk-step>
+
+          <cdk-step
+            label="Upload Document"
+            formGroupName="merchantDoc"
+            [stepControl]="registerMerchantForm.get('merchantDoc')!"
+          >
+            <app-register-merchant-form-two
+              [registerMerchantForm]="registerMerchantForm"
+            ></app-register-merchant-form-two>
+          </cdk-step>
+        </app-register-merchant-stepper>
+      </form>
+
+      <p class="text-sm">
+        Already have an account?
+        <a
+          routerLink="/login"
+          class="text-blue-500 underline hover:no-underline"
+          >Login!</a
+        >
+      </p>
+    </div>
+  </div>
+</app-home>

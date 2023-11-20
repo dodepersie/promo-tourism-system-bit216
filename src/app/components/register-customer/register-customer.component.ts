@@ -16,10 +16,23 @@ import Swal from 'sweetalert2';
             (formSubmitted)="addUser($event)"
           ></app-register-customer-form>
 
-          <p class="text-sm">Are you a merchant? <a routerLink="/register-merchant" class="text-blue-500 underline hover:no-underline">Register as a Merchant!</a></p>
+          <p class="text-sm">
+            Are you a merchant?
+            <a
+              routerLink="/register-merchant"
+              class="text-blue-500 underline hover:no-underline"
+              >Register as a Merchant!</a
+            >
+          </p>
 
-          <p class="text-sm">Already have an account? <a routerLink="/login" class="text-blue-500 underline hover:no-underline">Login!</a></p>
-
+          <p class="text-sm">
+            Already have an account?
+            <a
+              routerLink="/login"
+              class="text-blue-500 underline hover:no-underline"
+              >Login!</a
+            >
+          </p>
         </div>
       </div>
     </app-home>
@@ -32,19 +45,18 @@ export class RegisterCustomerComponent {
     this.userService.createUser(user).subscribe({
       next: () => {
         Swal.fire({
-          icon: "success",
-          title: "Register Success!",
-          text: "You can explore and enjoy PromoTourism now!",
-        })
+          icon: 'success',
+          title: 'Register Success!',
+          text: 'You can explore and enjoy PromoTourism now!',
+        });
         this.router.navigate(['/login']);
       },
-      error: (error) => {
+      error: (err) => {
         Swal.fire({
-          icon: "error",
-          title: "Register Failed!",
-          text: "Failed to create User, try to contact administrator!",
-        })
-        console.error(error);
+          icon: 'error',
+          title: 'Register Failed!',
+          text: 'Failed to create User, try to contact Administrator!',
+        });
       },
     });
   }

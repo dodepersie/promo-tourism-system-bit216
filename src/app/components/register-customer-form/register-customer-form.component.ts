@@ -177,7 +177,7 @@ import { User } from '../../user';
             </div>
           </div>
 
-          <div *ngIf="password.errors?.['minLength']">
+          <div *ngIf="password.errors?.['minlength']">
             <div
               id="alert-2"
               class="flex items-center p-4 text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
@@ -195,7 +195,7 @@ import { User } from '../../user';
                 />
               </svg>
               <span class="sr-only">Info</span>
-              <div class="ms-3 text-sm font-medium">
+              <div class="ms-3 text-sm font-medium leading-loose">
                 Password must be at least 8 characters!
               </div>
             </div>
@@ -206,6 +206,7 @@ import { User } from '../../user';
           class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
           type="submit"
           [disabled]="userForm.invalid"
+          [class.disabled]="userForm.invalid"
         >
           Register
         </button>
@@ -243,11 +244,11 @@ export class RegisterCustomerFormComponent implements OnInit {
   ngOnInit() {
     this.initialState.subscribe((user) => {
       this.userForm = this.fb.group({
-        name: [user.name, [Validators.required]],
-        username: [user.username, [Validators.required]],
-        email: [user.email, [Validators.required, Validators.email]],
+        name: ['', [Validators.required]],
+        username: ['', [Validators.required]],
+        email: ['', Validators.compose([Validators.required, Validators.email])],
         password: [
-          user.password,
+          '',
           [Validators.required, Validators.minLength(8)],
         ],
       });
