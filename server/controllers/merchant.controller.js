@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const Merchant = require("../models/merchant");
+const User = require("../models/user");
 
 dotenv.config();
 
@@ -13,8 +14,18 @@ dotenv.config();
  */
 const createMerchant = async (req, res) => {
   try {
+    const existingMerchant = await Merchant.findOne({ email: req.body.email });
+    const existingUser = await User.findOne({
+      $or: [{ email: req.body.email }, { username: req.body.username }],
+    });
+
+    if (existingMerchant || existingUser) {
+      return res.status(400).send("Email or username is already registered");
+    }
+
+    const defaultPassword = "Merchant#1234!";
     const salt = await bcrypt.genSalt(10);
-    const hashPwd = await bcrypt.hash(req.body.password, salt);
+    const hashPwd = await bcrypt.hash(defaultPassword, salt);
 
     const merchant = new Merchant({
       name: req.body.name,

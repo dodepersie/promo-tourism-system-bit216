@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const User = require("../models/user");
+const Merchant = require("../models/merchant");
 const Role = require("../models/role");
 
 /**
@@ -10,6 +11,15 @@ const Role = require("../models/role");
  */
 const createUser = async (req, res) => {
   try {
+    const existingMerchant = await Merchant.findOne({ email: req.body.email });
+    const existingUser = await User.findOne({
+      $or: [{ email: req.body.email }, { username: req.body.username }],
+    });
+
+    if (existingMerchant || existingUser) {
+      return res.status(400).send("Email or username is already registered");
+    }
+
     const role = await Role.find({ name: "Customer" });
     const salt = await bcrypt.genSalt(10);
     const hashPwd = await bcrypt.hash(req.body.password, salt);

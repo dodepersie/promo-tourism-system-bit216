@@ -1,4 +1,4 @@
-<app-dashboard>
+<app-dashboard *ngIf="userData || merchantData?.status == 'Approved'">
   <div class="container max-w-7xl mx-auto p-4">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
       <div class="col-span-8">
@@ -20,36 +20,6 @@
           *ngIf="merchantData"
           class="bg-gray-100 p-4 rounded-lg shadow space-y-4"
         >
-          <ng-container *ngIf="merchantData.status == 'Pending'">
-            <div class="flex flex-wrap items-center gap-3">
-              <h1 class="text-2xl leading-loose">
-                Welcome, {{ merchantData.name }}!
-              </h1>
-
-              <span
-                class="flex items-center gap-3 bg-red-700 text-white text-sm font-medium px-2.5 py-0.5 rounded"
-              >
-                <svg
-                  class="w-2 h-2"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 14 14"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
-                  />
-                </svg>
-
-                Account Status: {{ merchantData.status }}
-              </span>
-            </div>
-          </ng-container>
-
           <ng-container *ngIf="merchantData.status == 'Approved'">
             <div class="flex flex-wrap items-center gap-3">
               <h1 class="text-2xl leading-loose">
@@ -106,3 +76,38 @@
     </div>
   </div>
 </app-dashboard>
+
+<ng-container
+  *ngIf="
+    merchantData?.status == 'Pending' || merchantData?.status == 'Rejected'
+  "
+>
+  <div
+    class="flex flex-col justify-center items-center text-center p-4 min-h-screen gap-5"
+  >
+    <h1 class="text-3xl leading-relaxed">
+      Account status is
+      <span class="text-red-700">{{ merchantData?.status }}</span>
+    </h1>
+
+    <ng-container *ngIf="merchantData?.status == 'Pending'">
+      <p class="text-xl leading-relaxed">
+        You need to wait for approval from Tourism Ministry Officer...
+      </p>
+    </ng-container>
+
+    <ng-container *ngIf="merchantData?.status == 'Rejected'">
+      <p class="text-xl leading-relaxed">
+        Don't be sad, better luck next time...
+      </p>
+    </ng-container>
+
+    <button
+      type="button"
+      (click)="logout()"
+      class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+    >
+      Logout
+    </button>
+  </div>
+</ng-container>

@@ -9,6 +9,7 @@
             label="Enter Information"
             formGroupName="merchantData"
             [stepControl]="registerMerchantForm.get('merchantData')!"
+            editable="false"
           >
             <app-register-merchant-form
               (formSubmitted)="addMerchant($event)"

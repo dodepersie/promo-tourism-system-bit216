@@ -18,7 +18,6 @@ import {
 import { User } from '../../user';
 import { Router } from '@angular/router';
 import { MerchantService } from 'src/app/_services/merchant.service';
-// import { UserService } from 'src/app/_services/user.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -51,17 +50,17 @@ export class RegisterMerchantComponent extends CdkStepper implements OnInit {
 
   ngOnInit(): void {
     this.registerMerchantForm = new FormGroup({
-      'merchantData': new FormGroup({
-        'name': new FormControl('', Validators.required),
-        'phoneNumber': new FormControl('', Validators.required),
-        'email': new FormControl('', Validators.required),
-        'password': new FormControl('', Validators.required),
-        'companyDesc': new FormControl('', Validators.required),
+      merchantData: new FormGroup({
+        name: new FormControl('', Validators.required),
+        phoneNumber: new FormControl('', Validators.required),
+        email: new FormControl('', Validators.required),
+        companyDesc: new FormControl('', Validators.required),
       }),
 
-      'merchantDoc': new FormGroup({
-        'documentName': new FormControl('', Validators.required),
-        'documentData': new FormControl('', Validators.required),
+      merchantDoc: new FormGroup({
+        documentName: new FormControl('', Validators.required),
+        documentDesc: new FormControl('', Validators.required),
+        documentData: new FormControl('', Validators.required),
       }),
     });
   }
@@ -77,11 +76,17 @@ export class RegisterMerchantComponent extends CdkStepper implements OnInit {
         // this.router.navigate(['/login']);
       },
       error: (err) => {
-        console.error(err);
+        let errorMessage =
+          'Failed to create User, try to contact Administrator!';
+
+          if(err.error) {
+            errorMessage = err.error;
+          }
+
         Swal.fire({
           icon: 'error',
           title: 'Register Failed!',
-          text: 'Failed to create User, try to contact Administrator!',
+          text: errorMessage,
         });
       },
     });

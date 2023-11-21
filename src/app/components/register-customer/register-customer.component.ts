@@ -52,10 +52,17 @@ export class RegisterCustomerComponent {
         this.router.navigate(['/login']);
       },
       error: (err) => {
+        let errorMessage =
+          'Failed to create User, try to contact Administrator!';
+
+        if (err.error) {
+          errorMessage = err.error;
+        }
+
         Swal.fire({
           icon: 'error',
           title: 'Register Failed!',
-          text: 'Failed to create User, try to contact Administrator!',
+          text: errorMessage,
         });
       },
     });

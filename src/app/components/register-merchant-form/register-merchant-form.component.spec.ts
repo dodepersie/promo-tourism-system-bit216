@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RegisterMerchantComponent } from './register-merchant-form.component';
+import { RegisterMerchantFormComponent } from './register-merchant-form.component';
 
-describe('RegisterMerchantComponent', () => {
-  let component: RegisterMerchantComponent;
-  let fixture: ComponentFixture<RegisterMerchantComponent>;
+describe('RegisterMerchantFormComponent', () => {
+  let component: RegisterMerchantFormComponent;
+  let fixture: ComponentFixture<RegisterMerchantFormComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [RegisterMerchantComponent]
+      declarations: [RegisterMerchantFormComponent]
     });
-    fixture = TestBed.createComponent(RegisterMerchantComponent);
+    fixture = TestBed.createComponent(RegisterMerchantFormComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

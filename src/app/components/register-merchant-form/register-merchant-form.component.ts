@@ -25,9 +25,6 @@ export class RegisterMerchantFormComponent implements OnInit {
   get email() {
     return this.registerMerchantForm.get('email');
   }
-  get password() {
-    return this.registerMerchantForm.get('password');
-  }
   get companyDesc() {
     return this.registerMerchantForm.get('companyDesc');
   }
@@ -40,10 +37,6 @@ export class RegisterMerchantFormComponent implements OnInit {
         email: [
           '',
           [Validators.compose([Validators.email, Validators.required])],
-        ],
-        password: [
-          '',
-          [Validators.compose([Validators.required, Validators.minLength(8)])],
         ],
         companyDesc: ['', [Validators.required]],
       });
