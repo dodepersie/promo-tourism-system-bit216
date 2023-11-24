@@ -7,6 +7,7 @@ const merchantSchema = new mongoose.Schema(
     password: { type: String },
     companyDesc: { type: String },
     phoneNumber: { type: String, unique: true },
+    isFirstLogin: { type: Boolean, default: true },
     status: {
       type: String,
       enum: ["Pending", "Approved", "Rejected"],

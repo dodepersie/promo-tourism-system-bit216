@@ -12,7 +12,7 @@ import { LoginPageComponent } from './components/login/login.component';
 import { JumbotronComponent } from './components/jumbotron/jumbotron.component';
 import { WhyUsComponent } from './components/why-us/why-us.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { DashboardUserIndexComponent } from './pages/dashboard-user-index/dashboard-user-index.component';
+import { DashboardUserIndexComponent } from './pages/dashboard/user-dashboard/dashboard-user-index.component';
 import { HomeMainComponent } from './components/home-main/home-main.component';
 import { RegisterCustomerFormComponent } from './components/register-customer-form/register-customer-form.component';
 import { RegisterCustomerComponent } from './components/register-customer/register-customer.component';
@@ -23,6 +23,15 @@ import { DashboardComponent } from './layouts/dashboard/dashboard.component';
 import { RegisterMerchantStepperComponent } from './components/register-merchant-stepper/register-merchant-stepper.component';
 import { RegisterMerchantFormTwoComponent } from './components/register-merchant-form-two/register-merchant-form-two.component';
 import { HomeProductsComponent } from './components/home-products/home-products.component';
+import { DashboardAccountManagementComponent } from './pages/dashboard/account-management/dashboard-account-management.component';
+import { MerchantDetailComponent } from './pages/dashboard/account-management/merchant-detail/merchant-detail.component';
+import { ProductManagementComponent } from './pages/dashboard/product-management/product-management.component';
+import { ChangeMerchantPasswordComponent } from './pages/dashboard/change-merchant-password/change-merchant-password.component';
+import { CreateNewProductComponent } from './pages/dashboard/product-management/create-new-product/create-new-product.component';
+import { EditProductComponent } from './pages/dashboard/product-management/edit-product/edit-product.component';
+import { ProductComponent } from './pages/product/product.component';
+import { ProductsComponent } from './pages/products/products.component';
+import { CheckoutProductComponent } from './pages/checkout-product/checkout-product.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +53,15 @@ import { HomeProductsComponent } from './components/home-products/home-products.
     RegisterMerchantStepperComponent,
     RegisterMerchantFormTwoComponent,
     HomeProductsComponent,
+    DashboardAccountManagementComponent,
+    MerchantDetailComponent,
+    ProductManagementComponent,
+    ChangeMerchantPasswordComponent,
+    CreateNewProductComponent,
+    EditProductComponent,
+    ProductComponent,
+    ProductsComponent,
+    CheckoutProductComponent,
   ],
   imports: [
     BrowserModule,

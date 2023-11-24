@@ -32,7 +32,8 @@ const login = async (req, res) => {
     const tokenPayload = {
       id: target._id,
       name: target.name || target.merchantName,
-      userType: user ? "user" : "merchant", // Indicate the type of the logged-in entity
+      userType: user ? "user" : "merchant",
+      // isFirstLogin: merchant && merchant.isFirstLogin,
     };
 
     const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, {
@@ -55,4 +56,32 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { login };
+/*
+  Change merchant password
+*/
+const changeMerchantPassword = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { password } = req.body;
+
+    const salt = await bcrypt.genSalt(10);
+    const hashPwd = await bcrypt.hash(password, salt);
+
+    const changePassword = await Merchant.findByIdAndUpdate(
+      id,
+      { password: hashPwd },
+      { new: true }
+    );
+
+    res.status(200).json({
+      status: "OK",
+      message: "Change password successfully!",
+      data: changePassword,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Something is wrong while changing password...");
+  }
+};
+
+module.exports = { login, changeMerchantPassword };

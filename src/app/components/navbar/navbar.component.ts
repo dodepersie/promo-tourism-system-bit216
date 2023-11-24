@@ -38,7 +38,7 @@ export class NavbarComponent implements OnInit {
         this.router.navigate(['/login']);
         Swal.fire('Logout successfully!', '', 'success');
       } else {
-        Swal.fire('Okay, Logout canceled!', '', 'info');
+        Swal.fire('Okay, logout canceled!', '', 'info');
       }
     });
   }

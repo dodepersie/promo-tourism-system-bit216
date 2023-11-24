@@ -8,16 +8,36 @@ const Product = require("../models/product");
  */
 const createProduct = async (req, res) => {
   try {
-    const { name, description, price, rating, image } = req.body;
+    const {
+      merchant_id,
+      name,
+      description,
+      price,
+      address,
+      state,
+      city,
+      rating,
+      image,
+    } = req.body;
 
-    const product = new Product({ name, description, price, rating, image });
+    const product = new Product({
+      merchant_id,
+      name,
+      description,
+      price,
+      address,
+      state,
+      city,
+      rating,
+      image,
+    });
     await product.save();
     res.send(product);
   } catch (error) {
     console.error(error);
     res.status(500).send(error);
   }
-}
+};
 
 /**
  * Retrieves all products from the database.
@@ -33,7 +53,19 @@ const getAllProducts = async (req, res) => {
     console.error(error);
     res.status(500).send(error);
   }
-}
+};
+
+const getProductByMerchantId = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const products = await Product.find({ merchant_id: id });
+
+    res.send(products);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+};
 
 /**
  * Retrieves a specific product by its ID.
@@ -51,7 +83,7 @@ const viewProduct = async (req, res) => {
     console.error(error);
     res.status(500).send(error);
   }
-}
+};
 
 /**
  * Updates a product's information by its ID.
@@ -62,11 +94,31 @@ const viewProduct = async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description, price, rating, image } = req.body;
+    const {
+      merchant_id,
+      name,
+      description,
+      price,
+      address,
+      state,
+      city,
+      rating,
+      image,
+    } = req.body;
 
     const product = await Product.findByIdAndUpdate(
       id,
-      { name, description, price, rating, image },
+      {
+        merchant_id,
+        name,
+        description,
+        price,
+        address,
+        state,
+        city,
+        rating,
+        image,
+      },
       { new: true }
     );
     res.send(product);
@@ -74,7 +126,7 @@ const updateProduct = async (req, res) => {
     console.error(error);
     res.status(500).send(error);
   }
-}
+};
 
 /**
  * Deletes a product by its ID.
@@ -92,12 +144,13 @@ const deleteProduct = async (req, res) => {
     console.error(error);
     res.status(500).send(error);
   }
-}
+};
 
 module.exports = {
   createProduct,
+  getProductByMerchantId,
   getAllProducts,
   viewProduct,
   updateProduct,
-  deleteProduct
+  deleteProduct,
 };
