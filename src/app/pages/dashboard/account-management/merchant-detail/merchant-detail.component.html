@@ -1,0 +1,56 @@
+<app-dashboard>
+  <div class="container max-w-7xl mx-auto p-4">
+    <div class="bg-gray-100 p-4 rounded-lg shadow space-y-4">
+      <ng-container *ngIf="merchant?.status == 'Pending'">
+        <div class="flex flex-wrap items-center gap-2">
+          <button
+            (click)="goBack()"
+            class="transition-all bg-blue-700 rounded-lg text-white text-md py-1.5 px-2 hover:bg-blue-800"
+          >
+            Back
+          </button>
+
+          <h1 class="text-xl">Reviewing Merchant: {{ merchant?.name }}</h1>
+        </div>
+
+        <hr class="border-b border-gray-200" />
+        <p>Merchant Name: {{ merchant?.name }}</p>
+        <p>Merchant Email: {{ merchant?.email }}</p>
+        <p>Phone Number: {{ merchant?.phoneNumber }}</p>
+        <p>Merchant Description: {{ merchant?.companyDesc }}</p>
+
+        <p>Document: ???</p>
+
+        <div class="space-x-1.5">
+          <button
+            *ngIf="merchant && merchant._id"
+            (click)="merchant && approveMerchant(merchant._id)"
+            class="transition-all bg-green-500 rounded-lg text-white py-2 px-2.5 hover:bg-green-700"
+          >
+            Approve
+          </button>
+          <button
+            *ngIf="merchant && merchant._id"
+            (click)="merchant && rejectMerchant(merchant._id)"
+            class="transition-all bg-red-500 rounded-lg text-white py-2 px-2.5 hover:bg-red-700"
+          >
+            Reject
+          </button>
+        </div>
+      </ng-container>
+
+      <ng-container
+        *ngIf="merchant?.status == 'Approved' || merchant?.status == 'Rejected'"
+      >
+        <p>
+          This account ({{ merchant?.name }}) is already
+          <strong>{{ merchant?.status }}</strong>
+        </p>
+      </ng-container>
+
+      <ng-container *ngIf="!merchant">
+        <p>User not found..</p>
+      </ng-container>
+    </div>
+  </div>
+</app-dashboard>
