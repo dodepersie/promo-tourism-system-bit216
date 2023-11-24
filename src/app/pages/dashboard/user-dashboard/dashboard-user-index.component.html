@@ -1,7 +1,7 @@
 <app-dashboard *ngIf="userData || merchantData?.status == 'Approved'">
   <div class="container max-w-7xl mx-auto p-4">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
-      <div class="col-span-8">
+      <div class="col-span-9">
         <div
           *ngIf="userData"
           class="bg-gray-100 p-4 rounded-lg shadow space-y-4"
@@ -10,12 +10,20 @@
             <h1 class="text-2xl leading-loose">
               Welcome, {{ userData.name }}!
             </h1>
-            <p>Username: {{ userData.username }}</p>
-            <p>Email: {{ userData.email }}</p>
-            <p>Role: Customer</p>
+            <ng-container *ngIf="userData.roles == '6554214edf0260336ced32a9'">
+              <p class="leading-loose">This is Dashboard for Customer</p>
+            </ng-container>
+
+            <ng-container *ngIf="userData.roles == '6554217cdf0260336ced32ab'">
+              <p class="leading-loose">
+                This is Dashboard for Tourism Ministry Officer, where you can
+                approve or reject Merchant registration.
+              </p>
+            </ng-container>
           </ng-container>
         </div>
 
+        <!-- Merchant -->
         <div
           *ngIf="merchantData"
           class="bg-gray-100 p-4 rounded-lg shadow space-y-4"
@@ -47,28 +55,76 @@
                 Account Status: {{ merchantData.status }}
               </span>
             </div>
+            <p class="leading-loose">
+              This is Dashboard for Merchant, where you can manage your tourism
+              products here, like add, edit or delete your products!
+            </p>
           </ng-container>
         </div>
       </div>
 
-      <div class="col-span-8 lg:col-span-4">
+      <div class="col-span-9 lg:col-span-3">
         <div
           *ngIf="userData"
           class="bg-gray-100 p-4 rounded-lg shadow space-y-4"
         >
-          <ng-container>
-            <h1 class="text-2xl leading-loose">Purchase History</h1>
+          <ng-container *ngIf="userData.roles == '6554214edf0260336ced32a9'">
+            <h1 class="text-2xl leading-loose">Customer Menu</h1>
 
-            <p>soon show history..</p>
+            <ul class="text-sm space-y-3">
+              <li>
+                <a
+                  routerLink="/user-dashboard"
+                  class="underline"
+                  >Dashboard</a
+                >
+              </li>
+              <li>
+                <a
+                  routerLink="/user-dashboard/my-profile"
+                  class="underline"
+                  >My Profile</a
+                >
+              </li>
+            </ul>
+          </ng-container>
+
+          <ng-container *ngIf="userData.roles == '6554217cdf0260336ced32ab'">
+            <h1 class="text-xl leading-loose">Officer Menu</h1>
+
+            <ul class="text-sm">
+              <li>
+                <a
+                  routerLink="/user-dashboard/account-management"
+                  class="underline"
+                  >Account Management</a
+                >
+              </li>
+            </ul>
           </ng-container>
         </div>
 
         <div *ngIf="merchantData">
           <ng-container *ngIf="merchantData.status == 'Approved'">
             <div class="bg-gray-100 p-4 rounded-lg shadow space-y-4">
-              <h1 class="text-2xl leading-loose">Products</h1>
+              <h1 class="text-xl leading-loose">Merchant Menu</h1>
 
-              <p>soon show products by merchant</p>
+              <ul class="text-sm space-y-4">
+                <li>
+                  <a
+                    routerLink="/user-dashboard/product-management"
+                    class="underline"
+                    >Product Management</a
+                  >
+                </li>
+                <li>
+                  <a
+                    routerLink="/user-dashboard/change-merchant-password"
+                    class="underline"
+                    >Change Password</a
+                  >
+                </li>
+              </ul>
             </div>
           </ng-container>
         </div>

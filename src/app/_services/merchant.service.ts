@@ -12,6 +12,17 @@ export class MerchantService {
 
   constructor(private httpClient: HttpClient) {}
 
+  private refreshMerchants() {
+    this.httpClient.get<Merchant[]>(`${this.url}`).subscribe((merchants) => {
+      this.merchants$.next(merchants);
+    });
+  }
+
+  getMerchants(): Subject<Merchant[]> {
+    this.refreshMerchants();
+    return this.merchants$;
+  }
+
   createMerchant(merchant: Merchant): Observable<string> {
     return this.httpClient.post(`${this.url}`, merchant, {
       responseType: 'text',
@@ -20,5 +31,24 @@ export class MerchantService {
 
   getMerchant(id: string): Observable<Merchant> {
     return this.httpClient.get<Merchant>(`${this.url}/${id}`);
+  }
+
+  updateMerchantStatus(id: string, newStatus: string): Observable<string> {
+    const updateData = { status: newStatus };
+
+    return this.httpClient.put(`${this.url}/status/${id}`, updateData, {
+      responseType: 'text',
+    });
+  }
+
+  updateMerchantIsFirstLogin(
+    id: string,
+    setIsFirstLogin: boolean
+  ): Observable<any> {
+    const updateData = { isFirstLogin: setIsFirstLogin };
+
+    return this.httpClient.put(`${this.url}/check-login/${id}`, updateData, {
+      responseType: 'text',
+    });
   }
 }

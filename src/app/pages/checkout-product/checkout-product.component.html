@@ -1,0 +1,63 @@
+<app-home>
+  <div class="container max-w-lg mx-auto p-4">
+    <div class="text-lg tracking-wide font-semibold leading-relaxed py-4">
+      Checkout: {{ product?.name }} Ticket
+    </div>
+
+    <div class="bg-gray-100 shadow rounded-lg p-4">
+      <form class="space-y-4" [formGroup]="checkOutDataForm" autocomplete="off">
+        <div class="space-y-2">
+          <label for="date">Select your schedule date</label>
+          <input
+            id="date"
+            type="date"
+            formControlName="date"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            placeholder="Date"
+            [min]="minDate"
+          />
+        </div>
+        <div class="space-y-2">
+          <label for="amountPeople">Amount of people</label>
+          <input
+            min="1"
+            id="amountPeople"
+            type="number"
+            formControlName="amountPeople"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            placeholder="Amount of people"
+          />
+        </div>
+        <div
+          class="text-md"
+          *ngIf="
+            product &&
+            product.price !== undefined &&
+            checkOutDataForm?.get('amountPeople')?.value !== undefined
+          "
+        >
+          Price:
+          <span class="font-bold">
+            RM
+            {{
+              (
+                (product.price !== undefined ? +product.price : 0) *
+                (checkOutDataForm.get("amountPeople")?.value !== undefined
+                  ? +checkOutDataForm.get("amountPeople")?.value
+                  : 0)
+              ).toFixed(2)
+            }}
+          </span>
+        </div>
+        <button
+          [disabled]="checkOutDataForm.invalid"
+          [class.disabled]="checkOutDataForm.invalid"
+          (click)="processPayment()"
+          class="transition-all bg-blue-700 hover:bg-blue-900 rounded-lg shadow py-1 px-2 text-md text-white"
+        >
+          Checkout Now
+        </button>
+      </form>
+    </div>
+  </div>
+</app-home>

@@ -1,5 +1,4 @@
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const Merchant = require("../models/merchant");
 const User = require("../models/user");
@@ -111,9 +110,49 @@ const updateMerchant = async (req, res) => {
   }
 };
 
+const updateMerchantStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    const merchant = await Merchant.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true }
+    );
+    res.send(merchant);
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .send("Something is wrong while updating Merchants Account...");
+  }
+};
+
+const updateMerchantFirstLogin = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { isFirstLogin } = req.body;
+
+    const merchant = await Merchant.findByIdAndUpdate(
+      id,
+      { isFirstLogin },
+      { new: true }
+    );
+    res.send(merchant);
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .send("Something is wrong while updating Merchants Account...");
+  }
+};
+
 module.exports = {
   createMerchant,
   getAllMerchants,
   updateMerchant,
   viewMerchant,
+  updateMerchantStatus,
+  updateMerchantFirstLogin
 };
