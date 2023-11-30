@@ -7,13 +7,19 @@
     <div>
       <input
         type="text"
+        id="documentName"
         placeholder="Document Name"
         formControlName="documentName"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       />
 
-      <div *ngIf="documentName?.invalid && (documentName?.dirty || documentName?.touched)">
+      <div
+        *ngIf="
+          documentName?.invalid &&
+          (documentName?.dirty || documentName?.touched)
+        "
+      >
         <div *ngIf="documentName?.errors?.['required']">
           <div
             id="alert-2"
@@ -43,13 +49,19 @@
     <div>
       <input
         type="text"
+        id="documentDesc"
         placeholder="Document Description"
         formControlName="documentDesc"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         required
       />
 
-      <div *ngIf="documentDesc?.invalid && (documentDesc?.dirty || documentDesc?.touched)">
+      <div
+        *ngIf="
+          documentDesc?.invalid &&
+          (documentDesc?.dirty || documentDesc?.touched)
+        "
+      >
         <div *ngIf="documentDesc?.errors?.['required']">
           <div
             id="alert-2"
@@ -104,7 +116,12 @@
             DOCX, PDF allowed
           </p>
         </div>
-        <input id="dropzone-file" type="file" class="hidden" formControlName="documentData" />
+        <input
+          id="documentData"
+          type="file"
+          class="hidden"
+          formControlName="documentData"
+        />
       </label>
     </div>
 

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const merchantSchema = new mongoose.Schema(
   {
-    name: { type: String },
+    name: { type: String, unique: true },
     email: { type: String, unique: true },
     password: { type: String },
     companyDesc: { type: String },

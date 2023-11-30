@@ -8,7 +8,7 @@
 
         <hr class="border-b border-gray-100 h-px" />
 
-        <div class="text-sm">Provided by: {{ merchant?.name }}</div>
+        <div class="text-sm">Provided by: {{ merchant?.name }} - Rating: 5/5</div>
 
         <div class="grid grid-cols-12 gap-3">
           <div class="col-span-12 md:col-span-6">
@@ -29,7 +29,7 @@
                 {{ product?.address }}, {{ product?.city }}, {{ product?.state }}
               </p>
 
-              <p class="font-bold">Price: RM {{ product?.price }}</p>
+              <p class="font-bold">Price: MYR {{ product?.price }}</p>
 
               <a
                 routerLink="/checkout/{{ product?._id }}"

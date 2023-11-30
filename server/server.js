@@ -6,6 +6,7 @@ const userRoute = require("./routes/user");
 const authRoute = require("./routes/auth");
 const productRoute = require("./routes/product");
 const merchantRoute = require("./routes/merchant");
+const midtransRoute = require("./routes/midtrans");
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use("/api/users", userRoute);
 app.use("/api/auth", authRoute);
 app.use("/api/products", productRoute);
 app.use("/api/merchants", merchantRoute);
+app.use("/api/midtrans", midtransRoute)
 
 app.listen(8000, () => {
   console.log("Server started on port 8000");
