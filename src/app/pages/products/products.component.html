@@ -11,7 +11,6 @@
         >
           <a routerLink="/products/{{ product._id }}">
             <img
-            class="rounded-t-lg bg-cover h-48 w-full transition-all duration-300 opacity-90 hover:opacity-100"
             src="{{ product.image }}"
               alt="{{ product.name }}"
             />
@@ -30,7 +29,7 @@
               {{ product.description }}
             </p>
             <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
-              Price: RM {{ product.price }}
+              Price: MYR {{ product.price }} - Rating: 5/5
             </p>
           </div>
         </div>

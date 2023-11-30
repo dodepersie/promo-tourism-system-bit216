@@ -16,6 +16,9 @@ import { EditProductComponent } from './pages/dashboard/product-management/edit-
 import { ProductsComponent } from './pages/products/products.component';
 import { ProductComponent } from './pages/product/product.component';
 import { CheckoutProductComponent } from './pages/checkout-product/checkout-product.component';
+import { ReviewTourismProductComponent } from './pages/review-tourism-product/review-tourism-product.component';
+import { ReviewPagesComponent } from './pages/review-tourism-product/review-pages/review-pages.component';
+import { ViewAnalyticsReportComponent } from './pages/view-analytics-report/view-analytics-report.component';
 
 const routes: Routes = [
   { path: '', component: HomeMainComponent, title: 'PromoTourism: Home' },
@@ -128,6 +131,26 @@ const routes: Routes = [
         path: 'change-merchant-password',
         component: ChangeMerchantPasswordComponent,
         title: 'PromoTourism: Change Merchant Password',
+      },
+      {
+        path: 'review-products',
+        children: [
+          {
+            path: '',
+            component: ReviewTourismProductComponent,
+            title: 'PromoTourism: Review Tourism Products',
+          },
+          {
+            path: 'test-page',
+            component: ReviewPagesComponent,
+            title: 'PromoTourism: Review Tourism Products',
+          },
+        ],
+      },
+      {
+        path: 'view-analytics',
+        component: ViewAnalyticsReportComponent,
+        title: 'PromoTourism: View Analytics Report',
       },
     ],
   },

@@ -38,21 +38,19 @@
         >
           Price:
           <span class="font-bold">
-            RM
+            MYR
             {{
               (
-                (product.price !== undefined ? +product.price : 0) *
-                (checkOutDataForm.get("amountPeople")?.value !== undefined
-                  ? +checkOutDataForm.get("amountPeople")?.value
-                  : 0)
+                product.price * checkOutDataForm.get("amountPeople")?.value
               ).toFixed(2)
             }}
           </span>
         </div>
         <button
+          id="checkOutBtn"
           [disabled]="checkOutDataForm.invalid"
           [class.disabled]="checkOutDataForm.invalid"
-          (click)="processPayment()"
+          (click)="processPaymentDirect()"
           class="transition-all bg-blue-700 hover:bg-blue-900 rounded-lg shadow py-1 px-2 text-md text-white"
         >
           Checkout Now

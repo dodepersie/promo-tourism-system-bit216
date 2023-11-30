@@ -32,6 +32,9 @@ import { EditProductComponent } from './pages/dashboard/product-management/edit-
 import { ProductComponent } from './pages/product/product.component';
 import { ProductsComponent } from './pages/products/products.component';
 import { CheckoutProductComponent } from './pages/checkout-product/checkout-product.component';
+import { ReviewTourismProductComponent } from './pages/review-tourism-product/review-tourism-product.component';
+import { ReviewPagesComponent } from './pages/review-tourism-product/review-pages/review-pages.component';
+import { ViewAnalyticsReportComponent } from './pages/view-analytics-report/view-analytics-report.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +65,9 @@ import { CheckoutProductComponent } from './pages/checkout-product/checkout-prod
     ProductComponent,
     ProductsComponent,
     CheckoutProductComponent,
+    ReviewTourismProductComponent,
+    ReviewPagesComponent,
+    ViewAnalyticsReportComponent,
   ],
   imports: [
     BrowserModule,
