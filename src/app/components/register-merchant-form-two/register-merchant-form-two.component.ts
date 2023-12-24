@@ -41,7 +41,7 @@ export class RegisterMerchantFormTwoComponent implements OnInit {
       title: 'Register Merchant Success!',
       text: 'We need to make decision for your registration and will inform you soon..',
     });
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']);
     this.formSubmitted.emit(formData);
   }
 }

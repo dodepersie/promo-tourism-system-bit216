@@ -19,6 +19,7 @@ import { User } from '../../user';
 import { Router } from '@angular/router';
 import { MerchantService } from 'src/app/_services/merchant.service';
 import Swal from 'sweetalert2';
+import { SwalService } from 'src/app/_services/swal.service';
 
 @Component({
   selector: 'app-register-merchant',
@@ -42,8 +43,8 @@ export class RegisterMerchantComponent extends CdkStepper implements OnInit {
     _dir: Directionality,
     _changeDetectorRef: ChangeDetectorRef,
     _elementRef: ElementRef<HTMLElement>,
-    private router: Router,
-    private merchantService: MerchantService
+    private merchantService: MerchantService,
+    private swalService: SwalService,
   ) {
     super(_dir, _changeDetectorRef, _elementRef);
   }
@@ -83,11 +84,7 @@ export class RegisterMerchantComponent extends CdkStepper implements OnInit {
             errorMessage = err.error;
           }
 
-        Swal.fire({
-          icon: 'error',
-          title: 'Register Failed!',
-          text: errorMessage,
-        });
+        this.swalService.errorSwal(errorMessage);
       },
     });
   }

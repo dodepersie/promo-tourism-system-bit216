@@ -31,9 +31,6 @@ const login = async (req, res) => {
     // Generate token based on the target (user or merchant)
     const tokenPayload = {
       id: target._id,
-      name: target.name || target.merchantName,
-      userType: user ? "user" : "merchant",
-      // isFirstLogin: merchant && merchant.isFirstLogin,
     };
 
     const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, {
@@ -41,13 +38,10 @@ const login = async (req, res) => {
     });
 
     res
-      .cookie("access_token", token, { httpOnly: true })
       .status(200)
       .json({
-        status: 200,
-        message: "Login successfully!",
         data: target,
-        userType: user ? "user" : "merchant", // Send the user type in the response
+        token: token,
       });
   } catch (error) {
     return res
@@ -84,4 +78,14 @@ const changeMerchantPassword = async (req, res) => {
   }
 };
 
-module.exports = { login, changeMerchantPassword };
+const verifyToken = async (token) => {
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    return decoded
+  } catch (err) {
+    console.log(err)
+    return null
+  }
+}
+
+module.exports = { login, changeMerchantPassword, verifyToken };

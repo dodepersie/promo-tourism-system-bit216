@@ -1,9 +1,10 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/_services/auth.service';
+import { GlobalService } from 'src/app/_services/global.service';
 import { MerchantService } from 'src/app/_services/merchant.service';
-import Swal from 'sweetalert2';
+import { SwalService } from 'src/app/_services/swal.service';
 
 @Component({
   selector: 'app-login',
@@ -11,12 +12,16 @@ import Swal from 'sweetalert2';
   styleUrls: ['./login.component.css'],
 })
 export class LoginPageComponent implements OnInit {
-  fb = inject(FormBuilder);
-  authService = inject(AuthService);
-  router = inject(Router);
-  merchant = inject(MerchantService);
-
   loginForm!: FormGroup;
+
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    private merchant: MerchantService,
+    private swalService: SwalService,
+    public globalService: GlobalService,
+  ) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -25,11 +30,12 @@ export class LoginPageComponent implements OnInit {
     });
   }
 
-  login() {
+ login() {
     this.authService.loginService(this.loginForm.value).subscribe({
       next: (res) => {
         const parsedData = JSON.parse(res);
         localStorage.setItem('user_id', parsedData.data._id);
+        localStorage.setItem('token', parsedData.token);
 
         // Get Local Storage Data
         const userId = localStorage.getItem('user_id');
@@ -41,7 +47,7 @@ export class LoginPageComponent implements OnInit {
               next: (merchant) => {
                 const isFirstLogin = merchant.isFirstLogin;
 
-                if(merchant.status =='Approved') {
+                if (merchant.status == 'Approved') {
                   if (isFirstLogin) {
                     this.router.navigate([
                       '/user-dashboard/change-merchant-password',
@@ -59,15 +65,12 @@ export class LoginPageComponent implements OnInit {
           }
         }
 
-        // Customer and Officer Login
+        // User Login
         this.authService.isLoggedIn$.next(true);
         this.router.navigate(['/user-dashboard']);
       },
       error: (err) => {
-        Swal.fire({
-          icon: 'warning',
-          title: err.error,
-        });
+        this.swalService.errorSwal(err.error);
       },
     });
   }

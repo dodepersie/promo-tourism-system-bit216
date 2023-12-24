@@ -1,42 +1,73 @@
 <app-home>
-  <div class="container max-w-7xl mx-auto p-4">
-    <div class="grid grid-cols-12 gap-5">
-      <div class="col-span-12 space-y-3">
-        <h1 class="text-2xl font-semibold leading-loose">
+  <div class="container max-w-7xl mx-auto p-4 pb-10">
+    <div class="md:grid grid-cols-9 gap-5">
+      <div class="col-span-6 space-y-3">
+        <div class="text-2xl font-semibold leading-loose">
           {{ product?.name }}
-        </h1>
+        </div>
 
-        <hr class="border-b border-gray-100 h-px" />
+        <div class="text-sm">
+          Provided by: {{ merchant?.name }} - Rating: 5/5
+        </div>
 
-        <div class="text-sm">Provided by: {{ merchant?.name }} - Rating: 5/5</div>
-
-        <div class="grid grid-cols-12 gap-3">
-          <div class="col-span-12 md:col-span-6">
+        <div class="space-y-3">
+          <div class="relative h-56 overflow-hidden rounded-lg md:h-96">
             <img
               src="{{ product?.image }}"
               alt="{{ product?.name }}"
-              class="transition-all duration-300 max-w-full shadow hover:shadow-xl rounded-lg"
+              class="transition-all absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
             />
           </div>
 
-          <div class="col-span-12 md:col-span-6">
+          <div>
             <article class="flex flex-col gap-3 leading-loose">
+              <div class="text-xl font-semibold leading-loose">
+                Description
+              </div>
+
               <p>{{ product?.description }}</p>
 
+              <div class="text-xl font-semibold leading-loose">Address</div>
+
               <p>
-                <span class="font-bold">Address: </span>
-
-                {{ product?.address }}, {{ product?.city }}, {{ product?.state }}
+                {{ product?.address }}, {{ product?.city }},
+                {{ product?.state }}
               </p>
-
-              <p class="font-bold">Price: MYR {{ product?.price }}</p>
-
-              <a
-                routerLink="/checkout/{{ product?._id }}"
-                class="transition-all w-[8.3rem] bg-blue-700 hover:bg-blue-900 rounded-lg shadow py-1 px-2 text-md text-white"
-                >Checkout now</a
-              >
             </article>
+          </div>
+        </div>
+      </div>
+
+      <aside class="col-span-3">
+        <app-checkout-product></app-checkout-product>
+      </aside>
+    </div>
+
+    <div class="text-xl font-semibold leading-loose my-4">Reviews</div>
+
+    <div class="lg:grid grid-cols-4 gap-4 font-semibold tracking-wide">
+      <div class="col-span-2">
+        <div class="border rounded-lg">
+          <div class="flex justify-between items-center border-b p-4">
+            <div>
+              Rating: 5
+            </div>
+
+            <div>
+              Review Date
+            </div>
+          </div>
+
+          <div class="text-xl py-7 px-4">Review here</div>
+
+          <div class="flex justify-between items-center border-t p-4">
+            <div>
+              Customer Name
+            </div>
+
+            <div>
+              Recommended
+            </div>
           </div>
         </div>
       </div>

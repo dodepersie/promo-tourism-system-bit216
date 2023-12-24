@@ -74,16 +74,9 @@
             <ul class="text-sm space-y-3">
               <li>
                 <a
-                  routerLink="/user-dashboard"
+                  routerLink="purchase-history"
                   class="underline"
-                  >Dashboard</a
-                >
-              </li>
-              <li>
-                <a
-                  routerLink="review-products"
-                  class="underline"
-                  >Review Tourism Products</a
+                  >Purchase History</a
                 >
               </li>
               <li>
@@ -99,7 +92,7 @@
           <ng-container *ngIf="userData.roles == '6554217cdf0260336ced32ab'">
             <h1 class="text-xl leading-loose">Officer Menu</h1>
 
-            <ul class="text-sm">
+            <ul class="text-sm space-y-4">
               <li>
                 <a
                   routerLink="account-management"

@@ -1,4 +1,6 @@
-<nav class="bg-white fixed w-full z-20 top-0 start-0 border-b border-gray-300">
+<nav
+  class="bg-white fixed w-full z-[999] top-0 start-0 border-b border-gray-300"
+>
   <div
     class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-3"
   >
@@ -9,12 +11,12 @@
     </a>
     <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
       <ng-container *ngIf="!isLoggedIn">
-        <a
-          routerLink="/login"
+        <button
+          (click)="openLoginModal(true)"
           class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
           Login
-        </a>
+        </button>
       </ng-container>
 
       <ng-container *ngIf="isLoggedIn">
@@ -76,6 +78,17 @@
               >Products</a
             >
           </li>
+          <ng-container *ngIf="!isLoggedIn">
+            <li>
+              <a
+                routerLink="/register-merchant"
+                routerLinkActive="bg-blue-700 text-white md:text-blue-700 md:dark:text-blue-500"
+                [routerLinkActiveOptions]="{ exact: false }"
+                class="block py-2 pl-3 pr-4 text-gray-900 rounded md:bg-transparent md:p-0"
+                >Join Us</a
+              >
+            </li>
+          </ng-container>
         </ng-container>
 
         <ng-container *ngIf="isLoggedIn">
@@ -117,6 +130,16 @@
               >Products</a
             >
           </li>
+          <ng-container *ngIf="!isLoggedIn">
+            <li>
+              <a
+                routerLink="/register-merchant"
+                routerLinkActive="font-bold"
+                [routerLinkActiveOptions]="{ exact: false }"
+                >Join Us</a
+              >
+            </li>
+          </ng-container>
         </ng-container>
 
         <ng-container *ngIf="isLoggedIn">
@@ -133,3 +156,62 @@
     </div>
   </div>
 </nav>
+
+<!-- Login Modal -->
+<input
+  type="checkbox"
+  id="login_modal"
+  class="modal-toggle"
+  [checked]="globalService.isModalLoginOpen"
+/>
+<div class="modal" role="dialog" tabindex="-1">
+  <div class="modal-box">
+    <div class="flex justify-between items-center mb-6">
+      <div class="text-xl">Login</div>
+
+      <button (click)="openLoginModal(false)" class="absolute right-7 top-6">
+        ✕
+      </button>
+    </div>
+    <app-login></app-login>
+    <p class="text-sm mt-4">
+      Not have an account?
+      <a
+        (click)="openRegisterModal(true)"
+        class="cursor-pointer text-blue-500 underline hover:no-underline"
+        >Register now!</a
+      >
+    </p>
+  </div>
+</div>
+
+<!-- Register Modal -->
+<input
+  type="checkbox"
+  id="register_modal"
+  class="modal-toggle"
+  [checked]="globalService.isModalRegisterOpen"
+/>
+<div class="modal" role="dialog" tabindex="-1">
+  <div class="modal-box">
+    <div class="flex justify-between items-center mb-6">
+      <div class="text-xl">Register an Account</div>
+
+      <button (click)="openRegisterModal(false)" class="absolute right-7 top-6">
+        ✕
+      </button>
+    </div>
+
+    <app-register-customer-form
+      (formSubmitted)="addUser($event)"
+    ></app-register-customer-form>
+    <p class="text-sm mt-4">
+      Already have an account?
+      <a
+        (click)="openLoginModal(true)"
+        class="cursor-pointer text-blue-500 underline hover:no-underline"
+        >Login!</a
+      >
+    </p>
+  </div>
+</div>
