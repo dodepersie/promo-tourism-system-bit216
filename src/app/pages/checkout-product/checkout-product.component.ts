@@ -1,11 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { MidtransService } from 'src/app/_services/midtrans.service';
 import { ProductService } from 'src/app/_services/product.service';
-import { environments } from 'src/app/environments/environments';
 import { Product } from 'src/app/product';
-import Swal from 'sweetalert2';
+import { AuthService } from 'src/app/_services/auth.service';
+import { IPayPalConfig, ICreateOrderRequest } from 'ngx-paypal';
+import { SwalService } from 'src/app/_services/swal.service';
+import { lastValueFrom } from 'rxjs';
+import { PostOrder } from 'src/app/payment';
+import { PaypalService } from 'src/app/_services/paypal.service';
 
 @Component({
   selector: 'app-checkout-product',
@@ -16,32 +24,32 @@ export class CheckoutProductComponent implements OnInit {
   product: Product | undefined;
   selectedDate: string;
   minDate: string;
-  checkOutDataForm: FormGroup = new FormGroup({});
-  midtransScript: HTMLScriptElement;
+  amount: number = 1;
+  isDisabled: boolean = true;
+  isLoggedIn: boolean = false;
+  public payPalConfig?: IPayPalConfig;
 
   constructor(
     private route: ActivatedRoute,
     private productService: ProductService,
-    private midtransService: MidtransService
-  ) {
-    const today = new Date();
-    this.minDate = today.toISOString().split('T')[0];
-  }
+    private authService: AuthService,
+    private swalService: SwalService,
+    private fb: FormBuilder,
+    private paypalService: PaypalService
+  ) {}
 
   get date() {
-    return this.checkOutDataForm.get('date')!;
+    return this.checkOutDataForm.get('travel_date')!;
   }
   get amountPeople() {
-    return this.checkOutDataForm.get('amountPeople')!;
+    return this.checkOutDataForm.get('total_purchase')!;
   }
 
   ngOnInit() {
-    this.midtransInit();
     this.getData();
 
-    this.checkOutDataForm = new FormGroup({
-      date: new FormControl('', Validators.required),
-      amountPeople: new FormControl(1, Validators.required),
+    this.authService.isLoggedIn$.subscribe((res) => {
+      this.isLoggedIn = this.authService.isLoggedIn();
     });
   }
 
@@ -53,6 +61,8 @@ export class CheckoutProductComponent implements OnInit {
         this.productService.getProduct(productId).subscribe({
           next: (product) => {
             this.product = product;
+            // this.updatePayPalConfig();
+            this.patchInputForm();
           },
           error(err) {
             console.error(err);
@@ -62,85 +72,72 @@ export class CheckoutProductComponent implements OnInit {
     });
   }
 
-  midtransInit() {
-    const clientKey = environments.MIDTRANS_CLIENT_KEY;
-    this.midtransScript = document.createElement('script');
-    this.midtransScript.src = 'https://app.sandbox.midtrans.com/snap/snap.js';
-    this.midtransScript.setAttribute('data-client-key', clientKey);
-    this.midtransScript.async = true;
-    document.body.appendChild(this.midtransScript);
-
-    return () => {
-      document.body.removeChild(this.midtransScript);
-    };
-  }
-
-  processPaymentDirect() {
-    if (this.checkOutDataForm.valid && this.product && this.product.price) {
-      const amountPeopleValue = this.amountPeople.value;
-      const totalPrice = +this.product.price * +amountPeopleValue;
-
-      const data = {
-        name: this.product?.name,
-        price: totalPrice,
-        quantity: amountPeopleValue,
-        order_id: ~~(Math.random() * 100) + 1,
-      };
-
-      this.midtransService.createPaymentToken(data).subscribe({
-        next: (token) => {
-          console.log(token);
-          // Still developing
-        },
-        error(err) {
-          console.error(err);
-        },
+  patchInputForm() {
+    const userId = localStorage.getItem('user_id');
+    if (this.product && this.checkOutDataForm) {
+      this.checkOutDataForm.patchValue({
+        customer_id: userId,
+        product_id: this.product._id,
       });
     }
   }
 
-  // processPayment() {
-  //   if (this.checkOutDataForm.valid && this.product && this.product.price) {
-  //     const dateValue = this.date.value;
-  //     const amountPeopleValue = this.amountPeople.value;
-  //     const totalPrice = +this.product.price * +amountPeopleValue;
+  checkOutDataForm: FormGroup = this.fb.group({
+    customer_id: ['', [Validators.required]],
+    product_id: ['', [Validators.required]],
+    travel_date: ['', [Validators.required]],
+    total_purchase: [null, [Validators.required, Validators.min(1)]],
+  });
 
-  //     Swal.fire({
-  //       icon: 'question',
-  //       title: 'Confirm your order before making payment..',
-  //       showCancelButton: true,
-  //       html: `
-  //         <p>Schedule Date: ${dateValue}</p>
-  //         <p>Amount of People: ${amountPeopleValue}</p>
-  //         <p>Total Price: MYR ${totalPrice}</p>
-  //       `,
-  //     }).then((result) => {
-  //       if (result.isConfirmed) {
-  //         const data = {
-  //           name: this.product?.name,
-  //           price: totalPrice,
-  //           quantity: amountPeopleValue,
-  //           order_id: ~~(Math.random() * 100) + 1,
-  //         };
+  async checkOut() {
+    const order: PostOrder = {
+      customer_id: this.checkOutDataForm.value.customer_id,
+      product_id: this.checkOutDataForm.value.product_id,
+      travel_date: this.checkOutDataForm.value.travel_date,
+      total_purchase: this.checkOutDataForm.value.total_purchase,
+    };
 
-  //         this.midtransService.createPaymentToken(data).subscribe({
-  //           next: (token) => {
-  //             console.log(token);
-  //           },
-  //           error(err) {
-  //             console.error(err);
-  //           },
-  //         });
+    try {
+      const getInvoice = await lastValueFrom(
+        this.paypalService.createInvoice(order)
+      );
+      const getInvoicePay = await lastValueFrom(
+        this.paypalService.createInvoicePay(getInvoice.invoice._id)
+      );
 
-  //         // Swal.fire(
-  //         //   'Redirecting..',
-  //         //   'You will be navigate to the Midtrans Payment Gateway to complete your order..',
-  //         //   'info'
-  //         // );
-  //       } else {
-  //         Swal.fire('Okay, action canceled!', '', 'info');
-  //       }
-  //     });
+      console.log('Payment URL:', getInvoicePay.payment_url);
+
+      if (getInvoicePay.payment_url) {
+        window.open(getInvoicePay.payment_url, '_blank');
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  increaseAmount() {
+    this.amount++;
+    this.amountPeople.setValue(this.amount);
+    // this.updatePayPalConfig();
+  }
+
+  decreaseAmount() {
+    if (this.amount > 1) {
+      this.amount--;
+      this.amountPeople.setValue(this.amount);
+      // this.updatePayPalConfig();
+    }
+  }
+
+  // updatePayPalConfig() {
+  //   if (this.product) {
+  //     const pricePerItem = this.product.price!;
+  //     const totalPrice = pricePerItem * this.amount;
+  //     this.initConfig(
+  //       totalPrice.toString(),
+  //       this.product.name!,
+  //       this.amount.toString()
+  //     );
   //   }
   // }
 }

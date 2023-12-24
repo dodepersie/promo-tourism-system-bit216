@@ -17,7 +17,7 @@ class PermissionsService {
     state: RouterStateSnapshot
   ): boolean {
     const user_id = localStorage.getItem('user_id');
-    const restrictedRoutes = ['/login', '/register', '/register-merchant'];
+    const restrictedRoutes = ['/register-merchant'];
 
     if (user_id) {
       if (restrictedRoutes.includes(state.url)) {

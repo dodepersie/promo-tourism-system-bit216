@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MerchantService } from 'src/app/_services/merchant.service';
 import { UserService } from 'src/app/_services/user.service';
 import { User } from 'src/app/user';
@@ -15,12 +15,12 @@ import { Router } from '@angular/router';
 export class DashboardUserIndexComponent implements OnInit {
   userData: User | undefined;
   merchantData: Merchant | undefined;
-  authService = inject(AuthService);
-  router = inject(Router);
 
   constructor(
+    private authService: AuthService,
     private userService: UserService,
-    private merchantService: MerchantService
+    private merchantService: MerchantService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {

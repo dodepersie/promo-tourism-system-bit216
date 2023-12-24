@@ -15,7 +15,6 @@ import { FooterComponent } from './components/footer/footer.component';
 import { DashboardUserIndexComponent } from './pages/dashboard/user-dashboard/dashboard-user-index.component';
 import { HomeMainComponent } from './components/home-main/home-main.component';
 import { RegisterCustomerFormComponent } from './components/register-customer-form/register-customer-form.component';
-import { RegisterCustomerComponent } from './components/register-customer/register-customer.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { RegisterMerchantComponent } from './components/register-merchant/register-merchant.component';
 import { RegisterMerchantFormComponent } from './components/register-merchant-form/register-merchant-form.component';
@@ -35,6 +34,9 @@ import { CheckoutProductComponent } from './pages/checkout-product/checkout-prod
 import { ReviewTourismProductComponent } from './pages/review-tourism-product/review-tourism-product.component';
 import { ReviewPagesComponent } from './pages/review-tourism-product/review-pages/review-pages.component';
 import { ViewAnalyticsReportComponent } from './pages/view-analytics-report/view-analytics-report.component';
+import { NgxPayPalModule } from 'ngx-paypal';
+import { LoaderComponent } from './components/loader/loader.component';
+import { InvoiceComponent } from './pages/invoice/invoice.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +50,6 @@ import { ViewAnalyticsReportComponent } from './pages/view-analytics-report/view
     DashboardUserIndexComponent,
     HomeMainComponent,
     RegisterCustomerFormComponent,
-    RegisterCustomerComponent,
     PageNotFoundComponent,
     RegisterMerchantComponent,
     RegisterMerchantFormComponent,
@@ -68,6 +69,8 @@ import { ViewAnalyticsReportComponent } from './pages/view-analytics-report/view
     ReviewTourismProductComponent,
     ReviewPagesComponent,
     ViewAnalyticsReportComponent,
+    LoaderComponent,
+    InvoiceComponent,
   ],
   imports: [
     BrowserModule,
@@ -75,6 +78,7 @@ import { ViewAnalyticsReportComponent } from './pages/view-analytics-report/view
     HttpClientModule,
     ReactiveFormsModule,
     CdkStepperModule,
+    NgxPayPalModule
   ],
   exports: [
     CdkStepperModule,

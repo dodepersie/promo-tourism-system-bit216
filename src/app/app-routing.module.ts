@@ -1,10 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LoginPageComponent } from './components/login/login.component';
 import { RegisterMerchantComponent } from './components/register-merchant/register-merchant.component';
 import { DashboardUserIndexComponent } from './pages/dashboard/user-dashboard/dashboard-user-index.component';
 import { HomeMainComponent } from './components/home-main/home-main.component';
-import { RegisterCustomerComponent } from './components/register-customer/register-customer.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { AuthGuard } from './auth/auth.guard';
 import { DashboardAccountManagementComponent } from './pages/dashboard/account-management/dashboard-account-management.component';
@@ -15,24 +13,23 @@ import { CreateNewProductComponent } from './pages/dashboard/product-management/
 import { EditProductComponent } from './pages/dashboard/product-management/edit-product/edit-product.component';
 import { ProductsComponent } from './pages/products/products.component';
 import { ProductComponent } from './pages/product/product.component';
-import { CheckoutProductComponent } from './pages/checkout-product/checkout-product.component';
 import { ReviewTourismProductComponent } from './pages/review-tourism-product/review-tourism-product.component';
 import { ReviewPagesComponent } from './pages/review-tourism-product/review-pages/review-pages.component';
 import { ViewAnalyticsReportComponent } from './pages/view-analytics-report/view-analytics-report.component';
+import { InvoiceComponent } from './pages/invoice/invoice.component';
 
 const routes: Routes = [
   { path: '', component: HomeMainComponent, title: 'PromoTourism: Home' },
   {
-    path: 'login',
-    component: LoginPageComponent,
-    title: 'PromoTourism: Login',
+    path: 'invoice',
     canActivate: [AuthGuard],
-  },
-  {
-    path: 'register',
-    component: RegisterCustomerComponent,
-    title: 'PromoTourism: Register as Customer',
-    canActivate: [AuthGuard],
+    children: [
+      {
+        path: ':id',
+        component: InvoiceComponent,
+        title: 'PromoTourism: Invoice',
+      },
+    ],
   },
   {
     path: 'products',
@@ -62,25 +59,9 @@ const routes: Routes = [
     ],
   },
   {
-    path: 'checkout',
-    children: [
-      {
-        path: '',
-        redirectTo: '/',
-        pathMatch: 'full',
-      },
-      {
-        path: ':id',
-        component: CheckoutProductComponent,
-        title: 'PromoTourism: Checkout',
-        canActivate: [AuthGuard],
-      },
-    ],
-  },
-  {
     path: 'register-merchant',
     component: RegisterMerchantComponent,
-    title: 'PromoTourism: Register as Merchant',
+    title: 'PromoTourism: Register Merchant',
     canActivate: [AuthGuard],
   },
   {
@@ -133,12 +114,12 @@ const routes: Routes = [
         title: 'PromoTourism: Change Merchant Password',
       },
       {
-        path: 'review-products',
+        path: 'purchase-history',
         children: [
           {
             path: '',
             component: ReviewTourismProductComponent,
-            title: 'PromoTourism: Review Tourism Products',
+            title: 'PromoTourism: Purchase History',
           },
           {
             path: 'test-page',

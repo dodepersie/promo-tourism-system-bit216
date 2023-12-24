@@ -5,7 +5,26 @@
         Tourism Products
       </h1>
 
-      <a routerLink="/products" class="underline">View all..</a>
+      <div class="flex items-center gap-1">
+        <a routerLink="/products" class="underline hover:no-underline"
+          >View all..</a>
+
+          <svg
+          class="w-3 h-3 text-gray-800 dark:text-white"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 14 10"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M1 5h12m0 0L9 1m4 4L9 9"
+          /></svg
+      >
+      </div>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-4">
@@ -18,7 +37,7 @@
         >
           <a routerLink="/products/{{ product._id }}">
             <img
-              class="rounded-t-lg bg-cover h-48 w-full transition-all duration-300 opacity-90 hover:opacity-100"
+              class="rounded-t-lg bg-cover w-full transition-all duration-300 opacity-90 hover:opacity-100"
               src="{{ product.image }}"
               alt="{{ product.name }}"
             />
@@ -37,7 +56,7 @@
               {{ product.description }}
             </p>
             <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
-              Price: MYR {{ product.price }}
+              Price: {{ product.price | currency: 'MYR' }} - Rating: 5/5
             </p>
           </div>
         </div>

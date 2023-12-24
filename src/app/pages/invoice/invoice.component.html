@@ -1,0 +1,65 @@
+<div class="flex items-center min-h-screen">
+  <div class="container mx-auto p-8">
+    <div class="bg-white border rounded-lg shadow-lg p-8">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold">Invoice</h1>
+        <span class="text-gray-500">{{ invoiceData?.id }}</span>
+      </div>
+      <div class="flex justify-between items-center mb-6">
+        <div class="text-gray-600">
+          <h2 class="text-lg font-semibold">Billed To</h2>
+          <p>
+            {{ invoiceData?.payer?.name?.given_name }}
+            {{ invoiceData?.payer?.name?.surname }}
+          </p>
+          <p>{{ invoiceData?.payer?.address?.country_code }}</p>
+          <p>{{ invoiceData?.payer?.email_address }}</p>
+        </div>
+        <div class="text-gray-600">
+          <h2 class="text-lg font-semibold">Invoice Date</h2>
+          <p>{{ invoiceData?.create_time | date: 'longDate' }}</p>
+        </div>
+      </div>
+      <div class="overflow-x-auto" *ngIf="invoiceData">
+        <table class="min-w-full border-collapse">
+          <thead>
+            <tr>
+              <th class="border-b-2 border-gray-200 text-left py-2">
+                Description
+              </th>
+              <th class="border-b-2 border-gray-200 text-left py-2">Quantity</th>
+              <th class="border-b-2 border-gray-200 text-left py-2">Price</th>
+              <th class="border-b-2 border-gray-200 text-left py-2">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let unit of invoiceData?.purchase_units">
+              <td class="border-b border-gray-200 py-2">
+                {{ unit.items[0].name }}
+              </td>
+              <td class="border-b border-gray-200 py-2">
+                {{ unit.items[0].quantity }}
+              </td>
+              <td class="border-b border-gray-200 py-2">
+                ${{ unit.items[0].unit_amount.value }}
+              </td>
+              <td class="border-b border-gray-200 py-2">
+                ${{ unit.items[0].unit_amount.value }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="flex justify-start mt-6">
+        <div class="text-gray-600 text-lg">
+          <p>STATUS:
+            <span *ngIf="invoiceData?.status == 'COMPLETED'" class="text-green-500 font-bold">{{ invoiceData?.status }}</span>
+            <span *ngIf="invoiceData?.status == 'CREATED'" class="text-indigo-500 font-bold">{{ invoiceData?.status }}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-4 text-xs">&copy; PromoTourism</div>
+  </div>
+</div>

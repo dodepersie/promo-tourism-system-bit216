@@ -1,43 +1,45 @@
-<app-home>
-  <div class="py-10 p-4">
-    <div
-      class="container mx-auto max-w-lg p-6 bg-white border border-gray-200 rounded-lg shadow space-y-4"
-    >
-      <form id="registerMerchantForm" [formGroup]="registerMerchantForm">
-        <app-register-merchant-stepper [linearModeSelected]="false" #appStepper>
-          <cdk-step
-            label="Enter Information"
-            formGroupName="merchantData"
-            [stepControl]="registerMerchantForm.get('merchantData')!"
-            editable="false"
+<div class="flex items-center min-h-screen">
+  <div class="container mx-auto">
+    <div class="lg:grid grid-cols-12 items-center space-y-4 gap-10 px-10">
+      <div class="col-span-4 space-y-4">
+        <div class="text-2xl font-bold">Register as a Merchant</div>
+        <div class="text-sm">Please input all the required data to be our Merchant.</div>
+        <iframe src="https://lottie.host/embed/3c819b59-d58a-4ef5-a307-7a18669a816f/luC1dgtdsB.json" class="hidden lg:block w-full h-80"></iframe>
+      </div>
+
+      <div
+        class="col-span-8 p-6 border border-gray-200 rounded-lg shadow"
+      >
+        <form id="registerMerchantForm" [formGroup]="registerMerchantForm">
+          <app-register-merchant-stepper
+            [linearModeSelected]="false"
+            #appStepper
           >
-            <app-register-merchant-form
-              (formSubmitted)="addMerchant($event)"
-              [registerMerchantForm]="registerMerchantForm"
+            <cdk-step
+              label="Enter Information"
+              formGroupName="merchantData"
+              [stepControl]="registerMerchantForm.get('merchantData')!"
+              editable="false"
             >
-            </app-register-merchant-form>
-          </cdk-step>
+              <app-register-merchant-form
+                (formSubmitted)="addMerchant($event)"
+                [registerMerchantForm]="registerMerchantForm"
+              >
+              </app-register-merchant-form>
+            </cdk-step>
 
-          <cdk-step
-            label="Upload Document"
-            formGroupName="merchantDoc"
-            [stepControl]="registerMerchantForm.get('merchantDoc')!"
-          >
-            <app-register-merchant-form-two
-              [registerMerchantForm]="registerMerchantForm"
-            ></app-register-merchant-form-two>
-          </cdk-step>
-        </app-register-merchant-stepper>
-      </form>
-
-      <p class="text-sm">
-        Already have an account?
-        <a
-          routerLink="/login"
-          class="text-blue-500 underline hover:no-underline"
-          >Login!</a
-        >
-      </p>
+            <cdk-step
+              label="Upload Document"
+              formGroupName="merchantDoc"
+              [stepControl]="registerMerchantForm.get('merchantDoc')!"
+            >
+              <app-register-merchant-form-two
+                [registerMerchantForm]="registerMerchantForm"
+              ></app-register-merchant-form-two>
+            </cdk-step>
+          </app-register-merchant-stepper>
+        </form>
+      </div>
     </div>
   </div>
-</app-home>
+</div>
