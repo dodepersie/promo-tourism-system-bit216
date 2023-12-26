@@ -1,0 +1,89 @@
+<app-dashboard>
+  <div class="container max-w-7xl mx-auto p-4">
+    <div class="bg-gray-100 p-4 rounded-lg shadow space-y-4">
+      <div class="flex flex-wrap justify-between items-center gap-2">
+        <div class="text-xl font-bold">Purchase History</div>
+      </div>
+      <ng-container *ngIf="purchaseData">
+        <table
+          class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+        >
+          <thead
+            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+          >
+            <tr>
+              <th scope="col" class="px-6 py-3">#</th>
+              <th scope="col" class="px-6 py-3">Tourism Product</th>
+              <th scope="col" class="px-6 py-3">Invoice</th>
+              <th scope="col" class="px-6 py-3">Status</th>
+              <th scope="col" class="px-6 py-3">Review</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+              *ngFor="let purchase of purchaseData; let i = index"
+            >
+              <th
+                scope="row"
+                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+              >
+                {{ i + 1 }}
+              </th>
+              <td class="px-6 py-4">
+                <a
+                  routerLink="/products/{{ purchase.product_id }}"
+                  class="underline"
+                  >{{ purchase.product_id }}</a
+                >
+              </td>
+              <td class="px-6 py-4">
+                <a routerLink="/user-dashboard/invoice/{{ purchase._id }}" class="underline"
+                  >View</a
+                >
+              </td>
+              <td class="px-6 py-4">
+                <ng-container
+                  *ngIf="
+                    purchase.status == 'UNPAID' || purchase.status == 'PENDING'
+                  "
+                >
+                  <div class="text-red-500 font-bold">
+                    {{ purchase.status }}
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="purchase.status == 'PAID'">
+                  <div class="text-green-500 font-bold">
+                    {{ purchase.status }}
+                  </div>
+                </ng-container>
+              </td>
+
+              <td class="px-6 py-4">
+                <ng-container
+                  *ngIf="
+                    purchase.status == 'UNPAID' || purchase.status == 'PENDING'
+                  "
+                >
+                  <div class="text-red-500 font-bold">-</div>
+                </ng-container>
+
+                <ng-container *ngIf="purchase.status == 'PAID'">
+                  <a routerLink="/user-dashboard/review/{{ purchase._id }}" class="underline"
+                    >Review</a
+                  >
+                  <span>{{purchase.isCommented}}</span>
+                </ng-container>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-container>
+
+      <ng-container *ngIf="!purchaseData">
+        <div class="text-sm">No purchase data available..</div>
+      </ng-container>
+    </div>
+  </div>
+</app-dashboard>
