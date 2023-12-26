@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/_services/auth.service';
 import { MerchantService } from 'src/app/_services/merchant.service';
+import { SwalService } from 'src/app/_services/swal.service';
 import { Merchant } from 'src/app/merchant';
-import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-change-merchant-password',
@@ -16,7 +16,8 @@ export class ChangeMerchantPasswordComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private merchantService: MerchantService
+    private merchantService: MerchantService,
+    private swalService: SwalService
   ) {}
 
   get newPassword() {
@@ -94,28 +95,20 @@ export class ChangeMerchantPasswordComponent implements OnInit {
       this.authService.changeMerchantPassword(userId, newPassword).subscribe({
         next: () => {
           this.checkUserFirstLogin();
-
-          Swal.fire({
-            icon: 'success',
-            title: 'Password changed successfully!',
-          });
+          this.swalService.successSwal('Password changed successfully!');
 
           // Reset form
           this.changePasswordForm.reset();
         },
         error: (error) => {
           console.error(error);
-          Swal.fire({
-            icon: 'warning',
-            title: error.error,
-          });
+          this.swalService.errorSwal(error.error);
         },
       });
     } else {
-      Swal.fire({
-        icon: 'error',
-        title: 'New Password and Confirm New Password are mismatch!',
-      });
+      this.swalService.errorSwal(
+        'New Password and Confirm New Password are mismatch!'
+      );
     }
   }
 }

@@ -4,8 +4,8 @@ import { UserService } from 'src/app/_services/user.service';
 import { User } from 'src/app/user';
 import { Merchant } from 'src/app/merchant';
 import { AuthService } from 'src/app/_services/auth.service';
-import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { SwalService } from 'src/app/_services/swal.service';
 
 @Component({
   selector: 'app-dashboard-user-index',
@@ -20,6 +20,7 @@ export class DashboardUserIndexComponent implements OnInit {
     private authService: AuthService,
     private userService: UserService,
     private merchantService: MerchantService,
+    private swalService: SwalService,
     private router: Router,
   ) {}
 
@@ -56,6 +57,6 @@ export class DashboardUserIndexComponent implements OnInit {
     localStorage.removeItem('user_id');
     this.authService.isLoggedIn$.next(false);
     this.router.navigate(['/login']);
-    Swal.fire('Logout successfully!', '', 'success');
+    this.swalService.successSwal("Logout successfully!");
   }
 }

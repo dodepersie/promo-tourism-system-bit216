@@ -80,6 +80,8 @@ export class NavbarComponent implements OnInit {
       .then((result) => {
         if (result.isConfirmed) {
           localStorage.removeItem('user_id');
+          localStorage.removeItem('__paypal_storage__');
+          localStorage.removeItem('token');
           this.authService.isLoggedIn$.next(false);
           this.router.navigate(['/']);
           this.swalService.successSwal(

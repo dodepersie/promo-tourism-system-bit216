@@ -1,12 +1,10 @@
 require("dotenv").config();
 const express = require("express");
 const axios = require("axios");
-const User = require("../models/user");
 const Product = require("../models/product");
 const Merchant = require("../models/merchant");
 const Purchase = require("../models/purchase");
 const exchange = require("../functions/ratesExchange");
-const { customerAuth } = require("../middleware/customerAuth");
 const ssTunel = require("../functions/routeFrom");
 const router = express.Router();
 
@@ -19,7 +17,7 @@ const base = "https://api-m.sandbox.paypal.com";
 async function getAccessToken() {
   try {
     if (!process.env.PAYPAL_CLIENT_ID || !process.env.PAYPAL_CLIENT_SECRET) {
-      throw new Error("MISSING_API_CREDENTIALS")
+      throw new Error("MISSING_API_CREDENTIALS");
     }
     const response = await axios({
       method: "POST",
@@ -29,11 +27,11 @@ async function getAccessToken() {
         password: process.env.PAYPAL_CLIENT_SECRET,
       },
       data: "grant_type=client_credentials",
-    })
-    const data = await response.data
-    return data.access_token
+    });
+    const data = await response.data;
+    return data.access_token;
   } catch (error) {
-    console.error("Failed to generate Access Token:", error)
+    console.error("Failed to generate Access Token:", error);
   }
 }
 
@@ -43,8 +41,8 @@ async function getAccessToken() {
  */
 const createOrder = async (payload) => {
   // using payload to pass the orders information
-  console.log("createOrder payload:", payload)
-  const access_token = await getAccessToken()
+  console.log("createOrder payload:", payload);
+  const access_token = await getAccessToken();
   const response = await axios({
     method: "POST",
     url: `${base}/v2/checkout/orders`,
@@ -53,9 +51,9 @@ const createOrder = async (payload) => {
       Authorization: `Bearer ${access_token}`,
     },
     data: payload,
-  })
-  return handleResponse(response)
-}
+  });
+  return handleResponse(response);
+};
 
 /**
  * Capture an order payment by passing the approved order ID.
@@ -64,7 +62,7 @@ const createOrder = async (payload) => {
  * @returns {Object} Capture response
  **/
 const captureOrder = async (orderID) => {
-  const access_token = await getAccessToken()
+  const access_token = await getAccessToken();
   const response = await axios({
     method: "POST",
     url: `${base}/v2/checkout/orders/${orderID}/capture`,
@@ -72,9 +70,9 @@ const captureOrder = async (orderID) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token}`,
     },
-  })
-  return handleResponse(response)
-}
+  });
+  return handleResponse(response);
+};
 
 /**
  * Get order details by passing the approved order ID.
@@ -83,7 +81,7 @@ const captureOrder = async (orderID) => {
  * @returns {Object} Order details
  */
 const getOrders = async (id) => {
-  const access_token = await getAccessToken()
+  const access_token = await getAccessToken();
   const response = await axios({
     method: "GET",
     url: `${base}/v2/checkout/orders/${id}`,
@@ -91,9 +89,9 @@ const getOrders = async (id) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${access_token}`,
     },
-  })
-  return handleResponse(response)
-}
+  });
+  return handleResponse(response);
+};
 
 /**
  * Handle response from PayPal API
@@ -103,14 +101,14 @@ const getOrders = async (id) => {
  **/
 async function handleResponse(response) {
   try {
-    const jsonResponse = await response.data
+    const jsonResponse = await response.data;
     return {
       jsonResponse,
       httpStatusCode: response.status,
-    }
+    };
   } catch (err) {
-    const errorMessage = await response.text()
-    throw new Error(errorMessage)
+    const errorMessage = await response.text();
+    throw new Error(errorMessage);
   }
 }
 
@@ -121,8 +119,8 @@ async function handleResponse(response) {
  * @description Test route
  */
 router.get("/", (req, res) => {
-  res.status(200).json({ message: "success" })
-})
+  res.status(200).json({ message: "success" });
+});
 
 /**
  * @path /payment/invoice
@@ -168,7 +166,7 @@ router.post("/invoice", async (req, res) => {
     );
 
     // create invoice in database before create order in paypal
-    console.log("Create invoice:", products._id)
+    console.log("Create invoice:", products._id);
     const invoice = await Purchase.create({
       travel_date,
       total_purchase,
@@ -188,15 +186,15 @@ router.post("/invoice", async (req, res) => {
       throw {
         message: `Failed to create invoice`,
         status: false,
-      }
+      };
     }
     res
       .status(200)
-      .json({ message: "success create order in database", invoice })
+      .json({ message: "success create order in database", invoice });
   } catch (err) {
-    res.status(500).json({ message: err.message })
+    res.status(500).json({ message: err.message });
   }
-})
+});
 
 /**
  * @path /payment/invoice/:id/pay
@@ -206,27 +204,27 @@ router.post("/invoice", async (req, res) => {
  */
 router.post("/invoice/:id/pay", async (req, res) => {
   try {
-    console.log("Try to generate payment...")
-    const { id } = req.params
+    console.log("Try to generate payment...");
+    const { id } = req.params;
 
     if (!id) {
-      console.log("Invoice id is required")
-      return res.status(500).json({ message: "Invoice id is required" })
+      console.log("Invoice id is required");
+      return res.status(500).json({ message: "Invoice id is required" });
     }
 
-    const invoice = await Purchase.findOne({ _id: id })
+    const invoice = await Purchase.findOne({ _id: id });
     if (!invoice) {
-      console.log("Invoice not found")
-      return res.status(500).json({ message: "Invoice not found" })
+      console.log("Invoice not found");
+      return res.status(500).json({ message: "Invoice not found" });
     }
 
-    const products = await Product.findOne({ _id: invoice.product_id })
+    const products = await Product.findOne({ _id: invoice.product_id });
     if (!products) {
-      console.log("Product not found")
-      return res.status(500).json({ message: "Product not found" })
+      console.log("Product not found");
+      return res.status(500).json({ message: "Product not found" });
     }
 
-    const originFrom = ssTunel.isFromTunnel(req.headers.origin)
+    const originFrom = ssTunel.isFromTunnel(req.headers.origin);
 
     const payment_body = {
       intent: "CAPTURE",
@@ -263,9 +261,9 @@ router.post("/invoice/:id/pay", async (req, res) => {
         return_url: `${originFrom}/api/payment/invoice/${invoice._id}/capture`,
         cancel_url: `${originFrom}/orders`,
       },
-    }
+    };
 
-    const { jsonResponse, httpStatusCode } = await createOrder(payment_body)
+    const { jsonResponse, httpStatusCode } = await createOrder(payment_body);
 
     const new_invoice = await Purchase.findOneAndUpdate(
       { _id: invoice._id },
@@ -274,20 +272,22 @@ router.post("/invoice/:id/pay", async (req, res) => {
         response_code: jsonResponse.id,
         response_stringify: JSON.stringify(jsonResponse),
       }
-    )
+    );
 
     res.status(httpStatusCode).json({
       message: "Success create order payment in PayPal",
       payment: jsonResponse,
       invoice: new_invoice,
       payment_url: `https://sandbox.paypal.com/checkoutnow?token=${jsonResponse.id}`,
-    })
+    });
   } catch (error) {
-    console.error("Failed to create order:", error.code ? error.code : error)
-    console.log(error.response.data)
-    res.status(500).json({ error: "Failed to create order.", response: error.message })
+    console.error("Failed to create order:", error.code ? error.code : error);
+    console.log(error.response.data);
+    res
+      .status(500)
+      .json({ error: "Failed to create order.", response: error.message });
   }
-})
+});
 
 /**
  * Capture an order payment by passing the approved order ID.
@@ -297,39 +297,39 @@ router.post("/invoice/:id/pay", async (req, res) => {
  **/
 router.get("/invoice/:id/capture", async (req, res) => {
   try {
-    console.log("Trying to capture the payment...")
+    console.log("Trying to capture the payment...");
 
-    const { id } = req.params
+    const { id } = req.params;
 
     if (!id) {
-      return res.status(500).json({ message: "Invoice id is required" })
+      return res.status(500).json({ message: "Invoice id is required" });
     }
 
-    const invoice = await Purchase.findOne({ _id: id })
+    const invoice = await Purchase.findOne({ _id: id });
 
     if (!invoice) {
-      return res.status(500).json({ message: "Invoice not found" })
+      return res.status(500).json({ message: "Invoice not found" });
     }
 
-    const orderDetails = await getOrders(invoice.response_code)
+    const orderDetails = await getOrders(invoice.response_code);
 
     if (!orderDetails) {
-      return res.status(500).json({ message: "Order not found" })
+      return res.status(500).json({ message: "Order not found" });
     }
 
-    console.log("Order details:", orderDetails.jsonResponse)
+    console.log("Order details:", orderDetails.jsonResponse);
 
     if (orderDetails.jsonResponse.status === "COMPLETED") {
-      return res.redirect(`${process.env.FE_HOST}/orders`)
+      return res.redirect(`${process.env.FE_HOST}/orders`);
     }
 
     if (orderDetails.jsonResponse.status !== "APPROVED") {
-      return res.status(500).json({ message: "Order not approved" })
+      return res.status(500).json({ message: "Order not approved" });
     }
 
     const { jsonResponse, httpStatusCode } = await captureOrder(
       invoice.response_code
-    )
+    );
 
     await Purchase.findOneAndUpdate(
       { _id: invoice._id },
@@ -338,15 +338,17 @@ router.get("/invoice/:id/capture", async (req, res) => {
         response_code: jsonResponse.id,
         response_stringify: JSON.stringify(jsonResponse),
       }
-    )
+    );
 
     // return to frontend
-    return res.redirect(`${process.env.FE_HOST}/invoice/${invoice._id}`)
+    return res.redirect(
+      `${process.env.FE_HOST}/user-dashboard/invoice/${invoice._id}`
+    );
   } catch (error) {
-    console.error("Failed to capture order:", error.code ? error.code : error)
-    return res.status(500).json({ error: "Failed to capture order." })
+    console.error("Failed to capture order:", error.code ? error.code : error);
+    return res.status(500).json({ error: "Failed to capture order." });
   }
-})
+});
 
 /**
  * Get order details by passing the approved order ID from invoice response_code
@@ -356,50 +358,48 @@ router.get("/invoice/:id/capture", async (req, res) => {
  * @throws Error
  **/
 router.get("/invoice/:id", async (req, res) => {
-  const { id } = req.params
+  const { id } = req.params;
   if (!id) {
-    return res.status(500).json({ message: "Invoice ID is required" })
+    return res.status(500).json({ message: "Invoice ID is required" });
   }
 
   try {
-    const invoice = await Purchase.findOne({ _id: id })
-    console.log(invoice)
+    const invoice = await Purchase.findOne({ _id: id });
     if (!invoice) {
-      return res.status(500).json({ message: "Invoice not found" })
+      return res.status(500).json({ message: "Invoice not found" });
     }
     const { jsonResponse, httpStatusCode } = await getOrders(
       invoice.response_code
-    )
-    console.log(jsonResponse)
+    );
     if (jsonResponse.status === "APPROVED") {
       return res.status(200).json({
         message: "Order approved",
         status: "approved",
         details: "Your Payment link has been approved.",
-      })
+      });
     }
-    res.status(httpStatusCode).json(jsonResponse)
+    res.status(httpStatusCode).json(jsonResponse);
   } catch (error) {
-    console.log(error.response.data)
+    console.log(error.response.data);
     if (error.response.data.details[0].issue === "INVALID_RESOURCE_ID") {
       const update_invoice = await Invoice.findOneAndUpdate(
         { _id: id },
         {
-          status: "expired",
+          status: "EXPIRED",
         }
-      )
+      );
       return res.status(500).json({
         message: "Order was expired",
         status: "expired",
         details: "Your Payment link has been expired.",
-      })
+      });
     }
-    console.error("Failed to get order data:", error.code ? error.code : error)
-    res.status(500).json({ error: "Failed to get order data." })
+    console.error("Failed to get order data:", error.code ? error.code : error);
+    res.status(500).json({ error: "Failed to get order data." });
   }
-})
+});
 
-router.get("/user/:id", async(req, res) => {
+router.get("/user/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -409,6 +409,30 @@ router.get("/user/:id", async(req, res) => {
     console.error(error);
     res.status(500).send(error);
   }
+});
+
+router.get("/invoice-db/:id", async(req, res) => {
+  const { id } = req.params;
+
+  try {
+    const invoice = await Purchase.findById(id);
+    res.send(invoice);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
 })
 
-module.exports = router
+router.get("/product/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const product = await Product.findById(id);
+    res.send(product);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(error);
+  }
+});
+
+module.exports = router;

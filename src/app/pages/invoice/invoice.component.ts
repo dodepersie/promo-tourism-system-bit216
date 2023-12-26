@@ -10,6 +10,7 @@ import { getInvoiceOrders } from 'src/app/payment';
 })
 export class InvoiceComponent implements OnInit {
   invoiceData: getInvoiceOrders | null = null;
+  yearNow: Number = new Date().getFullYear()
 
   constructor(
     private paypalService: PaypalService,
@@ -27,7 +28,6 @@ export class InvoiceComponent implements OnInit {
         this.paypalService.getInvoiceById(productId).subscribe({
           next: (invoiceData: getInvoiceOrders) => {
             this.invoiceData = invoiceData;
-            console.log(this.invoiceData);
           },
           error: (error) => {
             console.error('Error fetching invoice data:', error);

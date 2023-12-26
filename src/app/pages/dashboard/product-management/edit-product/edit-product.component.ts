@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from 'src/app/_services/product.service';
+import { SwalService } from 'src/app/_services/swal.service';
 import { Merchant } from 'src/app/merchant';
 import { Product } from 'src/app/product';
-import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-edit-product',
@@ -19,7 +19,8 @@ export class EditProductComponent implements OnInit {
   constructor(
     private productService: ProductService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private swalService: SwalService,
   ) {}
 
   get merchant_id() {
@@ -102,13 +103,8 @@ export class EditProductComponent implements OnInit {
           .subscribe({
             next: (product) => {
               const parsedProduct = JSON.parse(product);
-
               this.router.navigate(['/user-dashboard/product-management']);
-
-              Swal.fire({
-                icon: 'success',
-                title: `${parsedProduct.name} edited successfully!`,
-              });
+              this.swalService.successSwal(`${parsedProduct.name} edited successfully!`)
             },
             error(err) {
               console.error(err);

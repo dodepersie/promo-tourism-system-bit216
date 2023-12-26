@@ -27,13 +27,13 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-4">
+    <div class="grid grid-cols-6 lg:grid-cols-12 gap-4">
       <div
-        class="md:col-span-3"
+        class="col-span-6 sm:col-span-3"
         *ngFor="let product of products | slice : 0 : 4"
       >
         <div
-          class="max-w-md bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
+          class="max-w-full bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700"
         >
           <a routerLink="/products/{{ product._id }}">
             <img
@@ -56,7 +56,7 @@
               {{ product.description }}
             </p>
             <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
-              Price: {{ product.price | currency: 'MYR' }} - Rating: 5/5
+              Price: {{ product.price | currency: 'MYR' }}
             </p>
           </div>
         </div>
