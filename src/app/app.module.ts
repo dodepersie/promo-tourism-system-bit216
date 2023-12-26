@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-import { ReactiveFormsModule } from '@angular/forms';
-import {CdkStepperModule} from '@angular/cdk/stepper';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CdkStepperModule } from '@angular/cdk/stepper';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -34,9 +34,9 @@ import { CheckoutProductComponent } from './pages/checkout-product/checkout-prod
 import { ReviewTourismProductComponent } from './pages/review-tourism-product/review-tourism-product.component';
 import { ReviewPagesComponent } from './pages/review-tourism-product/review-pages/review-pages.component';
 import { ViewAnalyticsReportComponent } from './pages/view-analytics-report/view-analytics-report.component';
-import { NgxPayPalModule } from 'ngx-paypal';
 import { LoaderComponent } from './components/loader/loader.component';
 import { InvoiceComponent } from './pages/invoice/invoice.component';
+import { FlatpickrModule } from 'angularx-flatpickr';
 
 @NgModule({
   declarations: [
@@ -78,12 +78,11 @@ import { InvoiceComponent } from './pages/invoice/invoice.component';
     HttpClientModule,
     ReactiveFormsModule,
     CdkStepperModule,
-    NgxPayPalModule
+    FormsModule,
+    FlatpickrModule.forRoot()
   ],
-  exports: [
-    CdkStepperModule,
-  ],
+  exports: [CdkStepperModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

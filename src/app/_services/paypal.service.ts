@@ -1,7 +1,13 @@
 import { Injectable } from '@angular/core';
-import { PostOrder, getInvoice, getInvoiceOrders, Invoice, InvoiceDB } from '../payment';
+import {
+  PostOrder,
+  getInvoice,
+  getInvoiceOrders,
+  InvoiceDB
+} from '../payment';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
+import { Product } from '../product';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +24,7 @@ export class PaypalService {
   createInvoicePay(invoice_id: string) {
     return this.httpClient.post<getInvoice>(
       `${this.url}/invoice/${invoice_id}/pay`,
-      { }
+      {}
     );
   }
 
@@ -36,11 +42,32 @@ export class PaypalService {
     );
   }
 
+  getInvoiceDBById(invoice_id: string) {
+    return this.httpClient.get<InvoiceDB>(
+      `${this.url}/invoice-db/${invoice_id}`
+    );
+  }
+
   getUserOrder(invoice_id: string): Observable<InvoiceDB> {
     return this.httpClient.get<InvoiceDB>(`${this.url}/user/${invoice_id}`);
   }
 
-  // getProductDetail(id: string): Observable<getMerchantOrders> {
-  //   return this.httpClient.get<getMerchantOrders>(`${this.url}/`)
+  getProductDetail(id: string): Observable<Product> {
+    return this.httpClient.get<Product>(`${this.url}/product/${id}`);
+  }
+
+  // getProductDetail(productId: string): Observable<Product[]> {
+  //   const url = `${this.url}/product/${productId}`;
+
+  //   return this.httpClient.get<Product[]>(url).pipe(
+  //     map((products: Product[]) => {
+  //       return products.map(product => {
+  //         const productData = Array.isArray(product.user) && product.user.length > 0 ? product.user[0] : null;          return {
+  //           ...product,
+  //           productData
+  //         };
+  //       });
+  //     })
+  //   );
   // }
 }

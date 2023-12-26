@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductService } from 'src/app/_services/product.service';
+import { SwalService } from 'src/app/_services/swal.service';
 import { Product } from 'src/app/product';
 import Swal from 'sweetalert2';
 
@@ -10,7 +11,10 @@ import Swal from 'sweetalert2';
 })
 export class ProductManagementComponent implements OnInit {
   productData: Product[] = [];
-  constructor(private productService: ProductService) {}
+  constructor(
+    private productService: ProductService,
+    private swalService: SwalService
+  ) {}
 
   ngOnInit(): void {
     this.getProducts();
@@ -32,27 +36,22 @@ export class ProductManagementComponent implements OnInit {
   }
 
   deleteProduct(id: string, name: string) {
-    Swal.fire({
-      icon: "question",
-      title: `Are you sure want to delete ${name}?`,
-      showCancelButton: true,
-      confirmButtonText: 'Yes!',
-      cancelButtonText: 'No',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.productService.deleteProduct(id).subscribe({
-          next: () => {
-            // Refresh Data
-            this.getProducts();
-
-            Swal.fire(`${name} deleted successfully!`, '', 'success');
-          }, error(err) {
+    this.swalService
+      .swalWithDialog(`Are you sure want to delete ${name}?`)
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.productService.deleteProduct(id).subscribe({
+            next: () => {
+              this.getProducts();
+              this.swalService.successSwal(`${name} deleted sucessfully!`);
+            },
+            error(err) {
               console.error(err);
-          },
-        });
-      } else {
-        Swal.fire(`${name} not deleted!`, '', 'info');
-      }
-    });
+            },
+          });
+        } else {
+          this.swalService.infoSwal(`${name} not deleted!`);
+        }
+      });
   }
 }

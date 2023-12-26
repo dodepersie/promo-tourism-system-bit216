@@ -21,17 +21,6 @@ import { InvoiceComponent } from './pages/invoice/invoice.component';
 const routes: Routes = [
   { path: '', component: HomeMainComponent, title: 'PromoTourism: Home' },
   {
-    path: 'invoice',
-    canActivate: [AuthGuard],
-    children: [
-      {
-        path: ':id',
-        component: InvoiceComponent,
-        title: 'PromoTourism: Invoice',
-      },
-    ],
-  },
-  {
     path: 'products',
     children: [
       {
@@ -72,6 +61,16 @@ const routes: Routes = [
         path: '',
         component: DashboardUserIndexComponent,
         title: 'PromoTourism: Dashboard',
+      },
+      {
+        path: 'invoice',
+        children: [
+          {
+            path: ':id',
+            component: InvoiceComponent,
+            title: 'PromoTourism: Invoice',
+          },
+        ],
       },
       {
         path: 'account-management',
@@ -115,14 +114,14 @@ const routes: Routes = [
       },
       {
         path: 'purchase-history',
+        component: ReviewTourismProductComponent,
+        title: 'PromoTourism: Purchase History',
+      },
+      {
+        path: 'review',
         children: [
           {
-            path: '',
-            component: ReviewTourismProductComponent,
-            title: 'PromoTourism: Purchase History',
-          },
-          {
-            path: 'test-page',
+            path: ':id',
             component: ReviewPagesComponent,
             title: 'PromoTourism: Review Tourism Products',
           },

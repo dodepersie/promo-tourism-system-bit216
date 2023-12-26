@@ -1,8 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import * as moment from 'moment';
-import { LoginToken } from '../login-token';
 
 @Injectable({
   providedIn: 'root',
@@ -12,12 +10,6 @@ export class AuthService {
   isLoggedIn$ = new BehaviorSubject<boolean>(false);
 
   constructor(private httpClient: HttpClient) {}
-
-  setSession(authResult: LoginToken) {
-    const expiresIn = moment().add(authResult.expiresIn, "second")
-    localStorage.setItem("token", authResult.token)
-    localStorage.setItem("expiresIn", JSON.stringify(expiresIn.valueOf()))
-  }
 
   loginService(loginObj: any) {
     return this.httpClient.post(`${this.url}/login`, loginObj, {
@@ -37,15 +29,5 @@ export class AuthService {
 
   isLoggedIn() {
     return !!localStorage.getItem('user_id');
-  }
-
-  getExpiration() {
-    const expiration = localStorage.getItem("expiresIn")
-    if (expiration) {
-      const expiresIn = JSON.parse(expiration)
-      return moment(expiresIn)
-    } else {
-      return null
-    }
   }
 }

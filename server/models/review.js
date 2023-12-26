@@ -4,7 +4,6 @@ const Schema = mongoose.Schema;
 const reviewSchema = new mongoose.Schema(
   {
     purchase_id: { type: [Schema.Types.ObjectId], ref: "Purchase" },
-    merchant_id: { type: [Schema.Types.ObjectId], ref: "Merchant" },
     user_id: { type: [Schema.Types.ObjectId], ref: "User" },
     product_id: { type: [Schema.Types.ObjectId], ref: "Product" },
     rating: { type: Number, required: true, default: 0 },

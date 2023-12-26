@@ -171,23 +171,30 @@ export interface modalReview {
 }
 
 export interface postReview {
+  user_id: string,
+  purchase_id: string,
+  product_id: string,
   rating: number
-  comment: string
-  is_recommend: boolean
+  review: string,
 }
 
 export interface Review {
   _id: string
   rating: number
-  comment: string
-  is_recommend: boolean
-  invoice_id: string
-  customer_id: string
+  review: string
+  purchase_id: string
+  user_id: string
   merchant_id: string
   product_id: string
-  created_at: string
+  createdAt: string
+  isCommented: boolean
 }
 
 export interface ReviewUser extends Review {
   user: User[]
+}
+
+export interface ReviewWithUser {
+  reviewData: ReviewUser;
+  userData: User;
 }

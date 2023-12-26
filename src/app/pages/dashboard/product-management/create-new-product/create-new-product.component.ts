@@ -3,8 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MerchantService } from 'src/app/_services/merchant.service';
 import { ProductService } from 'src/app/_services/product.service';
+import { SwalService } from 'src/app/_services/swal.service';
 import { Merchant } from 'src/app/merchant';
-import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-create-new-product',
@@ -18,7 +18,8 @@ export class CreateNewProductComponent implements OnInit {
   constructor(
     private productService: ProductService,
     private merchantService: MerchantService,
-    private router: Router,
+    private swalService: SwalService,
+    private router: Router
   ) {}
 
   get merchant_id() {
@@ -87,12 +88,9 @@ export class CreateNewProductComponent implements OnInit {
       .subscribe({
         next: (product) => {
           const productParsed = JSON.parse(product);
-
-          Swal.fire({
-            icon: "success",
-            title: `${productParsed.name} added successfully!`,
-          })
-
+          this.swalService.successSwal(
+            `${productParsed.name} added successfully!`
+          );
           this.router.navigate(['/user-dashboard/product-management']);
         },
         error(err) {
