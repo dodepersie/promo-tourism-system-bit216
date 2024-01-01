@@ -37,6 +37,8 @@ import { ViewAnalyticsReportComponent } from './pages/view-analytics-report/view
 import { LoaderComponent } from './components/loader/loader.component';
 import { InvoiceComponent } from './pages/invoice/invoice.component';
 import { FlatpickrModule } from 'angularx-flatpickr';
+import { NgApexchartsModule } from 'ng-apexcharts';
+import { ViewAnalyticsReportMinistryComponent } from './pages/view-analytics-report-ministry/view-analytics-report-ministry.component';
 
 @NgModule({
   declarations: [
@@ -71,6 +73,7 @@ import { FlatpickrModule } from 'angularx-flatpickr';
     ViewAnalyticsReportComponent,
     LoaderComponent,
     InvoiceComponent,
+    ViewAnalyticsReportMinistryComponent,
   ],
   imports: [
     BrowserModule,
@@ -79,7 +82,8 @@ import { FlatpickrModule } from 'angularx-flatpickr';
     ReactiveFormsModule,
     CdkStepperModule,
     FormsModule,
-    FlatpickrModule.forRoot()
+    FlatpickrModule.forRoot(),
+    NgApexchartsModule
   ],
   exports: [CdkStepperModule],
   providers: [],

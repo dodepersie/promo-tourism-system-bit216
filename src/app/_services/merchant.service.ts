@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, Subject, tap } from 'rxjs';
-import { Merchant } from '../merchant';
+import { Observable, Subject } from 'rxjs';
+import { Merchant, getTopProduct } from '../merchant';
 
 @Injectable({
   providedIn: 'root',
@@ -50,5 +50,10 @@ export class MerchantService {
     return this.httpClient.put(`${this.url}/check-login/${id}`, updateData, {
       responseType: 'text',
     });
+  }
+
+  getProductAnalytics(id: string | null) {
+    return this.httpClient.get<getTopProduct[]>(`
+    ${this.url}/top_products/${id}`);
   }
 }

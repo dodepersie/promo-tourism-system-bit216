@@ -9,6 +9,4 @@ export interface Product {
   price?: number;
   rating?: string;
   image?: string;
-  total_sold?: string;
-  total_purchase?: string;
 }

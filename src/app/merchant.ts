@@ -9,3 +9,11 @@ export interface Merchant {
   status?: string,
   isFirstLogin?: boolean,
 }
+
+export interface getTopProduct {
+  _id: string
+  name: string
+  price: number
+  product_sold: number
+  total_sold: number
+}

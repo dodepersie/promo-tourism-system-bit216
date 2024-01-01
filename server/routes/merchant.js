@@ -7,6 +7,8 @@ const updateMerchant = merchantController.updateMerchant;
 const viewMerchant = merchantController.viewMerchant;
 const updateMerchantStatus = merchantController.updateMerchantStatus;
 const updateMerchantFirstLogin = merchantController.updateMerchantFirstLogin;
+const getMerchantTopProducts = merchantController.getMerchantTopProducts;
+const getAllApprovedMerchants = merchantController.getAllApprovedMerchants;
 
 const router = express.Router();
 
@@ -27,5 +29,11 @@ router.put("/check-login/:id", updateMerchantFirstLogin);
 
 // View merchant account by ID
 router.get("/:id", viewMerchant);
+
+// Get Merchant Top products
+router.get("/top_products/:id", getMerchantTopProducts);
+
+// Get All Approved Merchants
+router.get("/approved", getAllApprovedMerchants);
 
 module.exports = router;
