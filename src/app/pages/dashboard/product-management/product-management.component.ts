@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ProductService } from 'src/app/_services/product.service';
 import { SwalService } from 'src/app/_services/swal.service';
 import { Product } from 'src/app/product';
-import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-product-management',

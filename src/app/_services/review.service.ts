@@ -29,10 +29,6 @@ export class ReviewService {
     });
   }
 
-  // getReviewByProductId(id: string): Observable<ReviewUser[]> {
-  //   return this.httpClient.get<ReviewUser[]>(`${this.url}/product/${id}`);
-  // }
-
   getReviewByProductId(productId: string): Observable<ReviewUser[]> {
     const url = `${this.url}/product/${productId}`;
 

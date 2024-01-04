@@ -5,9 +5,6 @@ const router = express.Router();
 
 router.get("/merchant/top_products", async (req, res) => {
   const { merchant_id, limit } = req.query;
-  console.log(
-    `merchant_id: ${merchant_id} from /ministry/merchant/top_product`
-  );
   try {
     let topProduct = await Product.aggregate([
       {

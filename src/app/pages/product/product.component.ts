@@ -5,7 +5,7 @@ import { ProductService } from 'src/app/_services/product.service';
 import { ReviewService } from 'src/app/_services/review.service';
 import { UserService } from 'src/app/_services/user.service';
 import { Merchant } from 'src/app/merchant';
-import { Review, ReviewUser, ReviewWithUser, postReview } from 'src/app/payment';
+import { ReviewUser, ReviewWithUser, postReview } from 'src/app/payment';
 import { Product } from 'src/app/product';
 import { User } from 'src/app/user';
 
