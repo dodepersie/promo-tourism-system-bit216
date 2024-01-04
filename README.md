@@ -10,6 +10,10 @@ PromoTourism is a system to find and explore local tourism products and services
 - Dicky Trismanto (E1900333) / Team Member
 - Putu Ananta Rizky Pratama (E1900352) / Team Member
 
+## Installation
+
+Use `npm install` on the main folder, and `cd server` then `npm install` to install dependencies for the backend
+
 ## Running Database
 
 Just use `cd server` then `npm run start`
