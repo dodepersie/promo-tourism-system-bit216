@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const dotenv = require("dotenv");
 const Merchant = require("../models/merchant");
+const Product = require("../models/product");
 const User = require("../models/user");
 
 dotenv.config();
@@ -148,11 +149,85 @@ const updateMerchantFirstLogin = async (req, res) => {
   }
 };
 
+/**
+ * Get Merchant Analyttics Report
+ */
+const getMerchantTopProducts = async (req, res) => {
+  try {
+    const { limit } = req.query;
+    const { id } = req.params;
+
+    const merchant = await Merchant.findById(id);
+
+    if (!merchant) {
+      return res.status(500).json({ message: "Merchant ID not Found!" });
+    }
+
+    const topProducts = await Product.aggregate([
+      {
+        $match: merchant._id ? { merchant_id: merchant._id.toString() } : {},
+      },
+      {
+        $lookup: {
+          from: "purchases",
+          localField: "_id",
+          foreignField: "product_id",
+          as: "purchases",
+          pipeline: [
+            {
+              $match: {
+                status: "PAID",
+              },
+            },
+          ],
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          price: 1,
+          product_sold: { $size: "$purchases" },
+          total_sold: { $multiply: ["$price", { $size: "$purchases" }] },
+        },
+      },
+      {
+        $sort: {
+          product_sold: -1,
+        },
+      },
+    ]);
+
+    const products = limit
+      ? topProducts.slice(0, parseInt(limit))
+      : topProducts;
+    res.status(200).json(products);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Something is wrong while getting merchant analytics report..",
+      error: error.message,
+    });
+  }
+};
+
+const getAllApprovedMerchants = async (req, res) => {
+  try {
+    const approvedMerchants = await Merchant.find({ status: "Approved" });
+    res.send(approvedMerchants);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Something went wrong while retrieving approved merchants.");
+  }
+};
+
 module.exports = {
   createMerchant,
   getAllMerchants,
   updateMerchant,
   viewMerchant,
   updateMerchantStatus,
-  updateMerchantFirstLogin
+  updateMerchantFirstLogin,
+  getMerchantTopProducts,
+  getAllApprovedMerchants,
 };

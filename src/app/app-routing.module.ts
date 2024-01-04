@@ -17,6 +17,7 @@ import { ReviewTourismProductComponent } from './pages/review-tourism-product/re
 import { ReviewPagesComponent } from './pages/review-tourism-product/review-pages/review-pages.component';
 import { ViewAnalyticsReportComponent } from './pages/view-analytics-report/view-analytics-report.component';
 import { InvoiceComponent } from './pages/invoice/invoice.component';
+import { ViewAnalyticsReportMinistryComponent } from './pages/view-analytics-report-ministry/view-analytics-report-ministry.component';
 
 const routes: Routes = [
   { path: '', component: HomeMainComponent, title: 'PromoTourism: Home' },
@@ -128,9 +129,24 @@ const routes: Routes = [
         ],
       },
       {
-        path: 'view-analytics',
-        component: ViewAnalyticsReportComponent,
-        title: 'PromoTourism: View Analytics Report',
+        path: 'merchant',
+        children: [
+          {
+            path: 'view-analytics',
+            component: ViewAnalyticsReportComponent,
+            title: 'PromoTourism: View Analytics Report',
+          },
+        ],
+      },
+      {
+        path: 'ministry',
+        children: [
+          {
+            path: 'view-analytics',
+            component: ViewAnalyticsReportMinistryComponent,
+            title: 'PromoTourism: View Analytics Report',
+          },
+        ],
       },
     ],
   },

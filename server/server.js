@@ -8,6 +8,7 @@ const productRoute = require("./routes/product");
 const merchantRoute = require("./routes/merchant");
 const paymentRoute = require("./routes/paypal");
 const reviewRoute = require("./routes/review");
+const ministryRoute = require("./routes/ministry");
 
 const app = express();
 
@@ -21,14 +22,14 @@ app
       "Origin, X-Requested-With, Content-Type, Accept, Authorization"
     );
     next();
-  });
-
-app.use("/api/users", userRoute);
-app.use("/api/auth", authRoute);
-app.use("/api/products", productRoute);
-app.use("/api/merchants", merchantRoute);
-app.use("/api/payment", paymentRoute);
-app.use("/api/review", reviewRoute);
+  })
+  .use("/api/users", userRoute)
+  .use("/api/auth", authRoute)
+  .use("/api/products", productRoute)
+  .use("/api/merchants", merchantRoute)
+  .use("/api/payment", paymentRoute)
+  .use("/api/review", reviewRoute)
+  .use("/api/ministry", ministryRoute);
 
 app.listen(8000, () => {
   console.log("Server started on port 8000");

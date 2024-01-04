@@ -13,8 +13,9 @@ import {
 } from 'ng-apexcharts';
 import { lastValueFrom } from 'rxjs';
 import { MerchantService } from 'src/app/_services/merchant.service';
+import { MinistryService } from 'src/app/_services/ministry.service';
 import { SwalService } from 'src/app/_services/swal.service';
-import { getTopProduct } from 'src/app/merchant';
+import { Merchant, getTopProduct } from 'src/app/merchant';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -31,51 +32,80 @@ export type ChartOptions = {
 };
 
 @Component({
-  selector: 'app-view-analytics-report',
-  templateUrl: './view-analytics-report.component.html',
-  styleUrls: ['./view-analytics-report.component.css'],
+  selector: 'app-view-analytics-report-ministry',
+  templateUrl: './view-analytics-report-ministry.component.html',
+  styleUrls: ['./view-analytics-report-ministry.component.css'],
 })
-export class ViewAnalyticsReportComponent implements OnInit {
+export class ViewAnalyticsReportMinistryComponent implements OnInit {
+  merchants: Merchant[] | undefined;
+  topProducts: getTopProduct[] | undefined;
+
   constructor(
     private merchantService: MerchantService,
+    private ministryService: MinistryService,
     private swalService: SwalService,
     private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
-    this.getData();
+    this.getMerchants();
+    this.getData(null);
   }
 
-  topProducts: getTopProduct[] | undefined;
+  async getMerchants() {
+    try {
+      this.merchantService.getMerchants().subscribe({
+        next: (merchants) => {
+          this.merchants = merchants.filter(
+            (merchants) => merchants.status === 'Approved'
+          );
+        },
+        error: (err) => {
+          console.error(err);
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   isFetching = false;
-  async getData() {
+  async getData(id: string | null) {
     this.isFetching = true;
     try {
-      const userId = localStorage.getItem('user_id');
-      if (userId !== null) {
-        const res = await lastValueFrom(
-          this.merchantService.getProductAnalytics(userId)
-        );
-        this.topProducts = res;
+      const res = await lastValueFrom(
+        this.ministryService.getMerchantProductAnalytics(id)
+      );
+      this.topProducts = res;
 
-        this.chartOptions.series = [
-          {
-            name: 'Total Sold',
-            data: res.map((product) => product.product_sold),
-          },
-        ];
+      this.chartOptions.series = [
+        {
+          name: 'Total Sold',
+          data: res.map((product) => product.product_sold),
+        },
+      ];
 
-        this.chartOptions.xaxis = {
-          categories: this.topProducts.map((product) => product.name),
-        };
-      } else {
-        console.log('User ID not found in localStorage');
-      }
+      this.chartOptions.xaxis = {
+        categories: this.topProducts.map((product) => product.name),
+      };
     } catch (error) {
       console.log(error);
       this.swalService.errorSwal('Failed to fetch data');
     }
     this.isFetching = false;
+  }
+
+  async onMerchantChange(event: Event) {
+    if (!event.target) return;
+
+    const id = (event.target as HTMLSelectElement).value;
+    if (!id) {
+      return;
+    }
+    if (id === 'all') {
+      return this.getData(null)
+    }
+    this.getData(id);
   }
 
   sortByForm: FormGroup = this.fb.group({

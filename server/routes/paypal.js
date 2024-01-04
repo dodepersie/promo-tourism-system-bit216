@@ -119,7 +119,7 @@ async function handleResponse(response) {
  * @description Test route
  */
 router.get("/", (req, res) => {
-  res.status(200).json({ message: "success" });
+  res.status(200).json({ message: "Ok ok.." });
 });
 
 /**
@@ -140,7 +140,7 @@ router.post("/invoice", async (req, res) => {
   }
 
   if (!total_purchase) {
-    res.status(500).send("Amount of People is Required!");
+    res.status(500).send("Total Purchase is Required!");
     return false;
   }
 
@@ -190,7 +190,7 @@ router.post("/invoice", async (req, res) => {
     }
     res
       .status(200)
-      .json({ message: "success create order in database", invoice });
+      .json({ message: "Success create order in database", invoice });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -208,19 +208,16 @@ router.post("/invoice/:id/pay", async (req, res) => {
     const { id } = req.params;
 
     if (!id) {
-      console.log("Invoice id is required");
-      return res.status(500).json({ message: "Invoice id is required" });
+      return res.status(500).json({ message: "Invoice ID is required" });
     }
 
     const invoice = await Purchase.findOne({ _id: id });
     if (!invoice) {
-      console.log("Invoice not found");
       return res.status(500).json({ message: "Invoice not found" });
     }
 
     const products = await Product.findOne({ _id: invoice.product_id });
     if (!products) {
-      console.log("Product not found");
       return res.status(500).json({ message: "Product not found" });
     }
 
@@ -302,7 +299,7 @@ router.get("/invoice/:id/capture", async (req, res) => {
     const { id } = req.params;
 
     if (!id) {
-      return res.status(500).json({ message: "Invoice id is required" });
+      return res.status(500).json({ message: "Invoice ID is required" });
     }
 
     const invoice = await Purchase.findOne({ _id: id });
